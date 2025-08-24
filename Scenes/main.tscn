@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://buh06gdv7ep1h"]
+
+[ext_resource type="PackedScene" uid="uid://dnvl5s8x0rc60" path="res://Scenes/Player/player.tscn" id="1_jjgbg"]
+[ext_resource type="PackedScene" uid="uid://bl171iapq1ltc" path="res://Scenes/Generics/static_boundary.tscn" id="2_bo1nx"]
+
+[node name="SceneRoot" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_jjgbg")]
+position = Vector2(163, 109)
+
+[node name="Floor" parent="." instance=ExtResource("2_bo1nx")]
+position = Vector2(162, 161)
+
+[node name="LeftWall" parent="." instance=ExtResource("2_bo1nx")]
+position = Vector2(1, 83)
+boundary_type = 1
+viewport_padding = 0.0
+
+[node name="RightWall" parent="." instance=ExtResource("2_bo1nx")]
+position = Vector2(319, 85)
+boundary_type = 2
+viewport_padding = 0.0
