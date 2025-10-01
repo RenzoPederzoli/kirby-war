@@ -1,6 +1,8 @@
 extends Node2D
 
 @onready var enemy_spawn_point: Marker2D = $EnemySpawnDebug
+@onready var background_track: AudioStreamPlayer = $BackgroundTrack
+
 var enemy_scene: PackedScene
 
 func _ready():
@@ -14,6 +16,10 @@ func _ready():
 	timer.timeout.connect(spawn_enemy)
 	timer.autostart = true
 	add_child(timer)
+	
+	# Start playing the background track if it's not already playing
+	if not background_track.playing:
+		background_track.play()
 
 func spawn_enemy():
 	var enemy = enemy_scene.instantiate()
