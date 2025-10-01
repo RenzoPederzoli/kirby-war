@@ -4,6 +4,12 @@ extends CharacterBody2D
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var sprite : Sprite2D = $Sprite2D
 
+# Shooting variables
+@onready var pellet_spawn_point : Marker2D = $ProjSpawnPoint
+@export var pellet_scene : PackedScene
+@export var fire_rate : float = 0.2  # Time between shots in seconds
+var can_shoot : bool = true
+
 # Movement variables
 var acceleration = 260.0  # How quickly we build up speed
 var deceleration = 150.0  # How quickly we slow down
@@ -15,6 +21,8 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready():
 	animation_player.play("idle")
+	# Load the pellet scene
+	pellet_scene = preload("res://Scenes/Props/base_pellet.tscn")
 
 func _physics_process(delta):
 	# Add gravity
@@ -37,6 +45,9 @@ func _physics_process(delta):
 	# Handle momentum-based horizontal movement
 	_handle_momentum_movement(direction, delta)
 	
+	# Handle shooting input
+	_handle_shooting_input()
+	
 	move_and_slide()
 
 func _handle_momentum_movement(direction: float, delta: float):
@@ -56,3 +67,22 @@ func _handle_momentum_movement(direction: float, delta: float):
 		# No input - gradually decelerate toward zero
 		velocity.x = move_toward(velocity.x, 0, deceleration * delta)
 
+func _handle_shooting_input():
+	# Check if left mouse button or up arrow is pressed
+	if Input.is_action_pressed("fire") or Input.is_action_pressed("ui_up"):  # Using fire action for left click, ui_up as up arrow
+		shoot();
+
+func shoot():
+	if can_shoot:
+		# Instantiate pellet at spawn point
+		var pellet = pellet_scene.instantiate()
+		get_parent().add_child(pellet)
+		pellet.global_position = pellet_spawn_point.global_position
+		
+		# Fire the pellet upward
+		pellet.fire(Vector2.UP)
+		
+		# Start fire rate cooldown
+		can_shoot = false
+		await get_tree().create_timer(fire_rate).timeout
+		can_shoot = true

@@ -7,10 +7,8 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_xpcdj"]
 radius = 12.0
 
-[sub_resource type="Animation" id="Animation_xpcdj"]
-resource_name = "move"
-length = 0.5
-loop_mode = 1
+[sub_resource type="Animation" id="Animation_mtuoh"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -18,10 +16,10 @@ tracks/0/path = NodePath("Sprite2D:region_rect")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [Rect2(0, 0, 32, 32), Rect2(32, 0, 32, 32), Rect2(64, 0, 32, 32), Rect2(96, 0, 32, 32), Rect2(128, 0, 32, 32)]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 32, 32)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -36,8 +34,8 @@ tracks/1/keys = {
 "values": [ExtResource("2_a3d8c")]
 }
 
-[sub_resource type="Animation" id="Animation_mtuoh"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_htcer"]
+resource_name = "braking"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -47,7 +45,7 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [Rect2(0, 0, 32, 32)]
 }
 tracks/1/type = "value"
@@ -92,8 +90,10 @@ tracks/1/keys = {
 "values": [ExtResource("3_xpcdj")]
 }
 
-[sub_resource type="Animation" id="Animation_htcer"]
-resource_name = "braking"
+[sub_resource type="Animation" id="Animation_xpcdj"]
+resource_name = "move"
+length = 0.5
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -101,10 +101,10 @@ tracks/0/path = NodePath("Sprite2D:region_rect")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
-"values": [Rect2(0, 0, 32, 32)]
+"values": [Rect2(0, 0, 32, 32), Rect2(32, 0, 32, 32), Rect2(64, 0, 32, 32), Rect2(96, 0, 32, 32), Rect2(128, 0, 32, 32)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -143,3 +143,7 @@ shape = SubResource("CircleShape2D_xpcdj")
 libraries = {
 &"": SubResource("AnimationLibrary_htcer")
 }
+
+[node name="ProjSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(0, -10)
+gizmo_extents = 28.2

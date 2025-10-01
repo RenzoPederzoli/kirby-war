@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://2c8i1ehs3u1y"]
+
+[ext_resource type="Texture2D" uid="uid://cmsioo1kh5wdw" path="res://Scenes/Props/Assets/base_pellet.png" id="1_3ld38"]
+[ext_resource type="Script" uid="uid://c10jx31e4r7c" path="res://Scenes/Props/Scripts/BasePellet.gd" id="1_rcuc8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rcuc8"]
+radius = 5.0
+
+[node name="BasePellet" type="Area2D"]
+script = ExtResource("1_rcuc8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_rcuc8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1, 0)
+texture = ExtResource("1_3ld38")
