@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://d25v66o1mgo2h"]
+
+[ext_resource type="Script" uid="uid://cw80t024lr7ry" path="res://Scenes/Enemies/Scripts/enemy_base.gd" id="1_p6c21"]
+[ext_resource type="Texture2D" uid="uid://cdi20j3ov288k" path="res://Scenes/Enemies/Assets/base_enemy.png" id="2_srcxp"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_p6c21"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pu86i"]
+radius = 18.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p6c21"]
+radius = 20.0
+
+[node name="EnemyBase" type="RigidBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_p6c21")
+gravity_scale = 0.07
+can_sleep = false
+continuous_cd = 2
+script = ExtResource("1_p6c21")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_pu86i")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_srcxp")
+
+[node name="TouchDamage" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TouchDamage"]
+shape = SubResource("CircleShape2D_p6c21")

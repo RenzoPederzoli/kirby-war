@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://buh06gdv7ep1h"]
+[gd_scene load_steps=4 format=3 uid="uid://buh06gdv7ep1h"]
 
+[ext_resource type="Script" uid="uid://oxcyahdyi0ko" path="res://Scenes/main.gd" id="1_8gbba"]
 [ext_resource type="PackedScene" uid="uid://dnvl5s8x0rc60" path="res://Scenes/Player/player.tscn" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://bl171iapq1ltc" path="res://Scenes/Generics/static_boundary.tscn" id="2_bo1nx"]
 
 [node name="SceneRoot" type="Node2D"]
+script = ExtResource("1_8gbba")
 
 [node name="Player" parent="." instance=ExtResource("1_jjgbg")]
 position = Vector2(163, 109)
@@ -20,3 +22,6 @@ viewport_padding = 0.0
 position = Vector2(319, 85)
 boundary_type = 2
 viewport_padding = 0.0
+
+[node name="EnemySpawnDebug" type="Marker2D" parent="."]
+position = Vector2(162, 3)
