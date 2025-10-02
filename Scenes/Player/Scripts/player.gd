@@ -16,6 +16,13 @@ var deceleration = 150.0  # How quickly we slow down
 var deceleration_multiplier = 1.0  # How much faster we slow down when changing direction
 var terminal_velocity = 180.0  # Maximum speed we can reach
 
+# Jumping variables
+@export var jump_velocity = -400.0  # How strong the jump is (negative for upward)
+var can_jump = true
+var jump_reset_timer = 0.0
+var jump_reset_delay = 0.1  # Small delay to prevent jump spam
+@onready var ground_raycast : RayCast2D = $GroundRayCast
+
 # Get the gravity from the project settings to be synced with RigidBody nodes
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -23,8 +30,14 @@ func _ready():
 	animation_player.play("idle")
 	# Load the pellet scene
 	pellet_scene = preload("res://Scenes/Props/base_pellet.tscn")
+	# Setup ground raycast
+	_setup_ground_raycast()
 
 func _physics_process(delta):
+	# Update jump reset timer
+	if jump_reset_timer > 0:
+		jump_reset_timer -= delta
+	
 	# Add gravity
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -45,6 +58,9 @@ func _physics_process(delta):
 	# Handle momentum-based horizontal movement
 	_handle_momentum_movement(direction, delta)
 	
+	# Handle jumping input
+	_handle_jumping_input()
+	
 	# Handle shooting input
 	_handle_shooting_input()
 	
@@ -52,6 +68,9 @@ func _physics_process(delta):
 	_handle_screen_wrapping()
 	
 	move_and_slide()
+	
+	# Check for jump reset after movement
+	_check_jump_reset()
 
 func _handle_momentum_movement(direction: float, delta: float):
 	# If we have input, accelerate in that direction
@@ -67,8 +86,15 @@ func _handle_momentum_movement(direction: float, delta: float):
 			# Normal acceleration toward target velocity
 			velocity.x = move_toward(velocity.x, target_velocity, acceleration * delta)
 	else:
-		# No input - gradually decelerate toward zero
-		velocity.x = move_toward(velocity.x, 0, deceleration * delta)
+		# No input - only decelerate toward zero if on the ground
+		if is_on_floor():
+			velocity.x = move_toward(velocity.x, 0, deceleration * delta)
+		# If in air, maintain current horizontal velocity (no deceleration)
+
+func _handle_jumping_input():
+	# Check if space bar is pressed
+	if Input.is_action_just_pressed("ui_accept") and can_jump:
+		jump()
 
 func _handle_shooting_input():
 	# Check if left mouse button or up arrow is pressed
@@ -86,6 +112,27 @@ func _handle_screen_wrapping():
 	# Check if player has gone off the right edge
 	elif global_position.x > viewport_size.x:
 		global_position.x = 0
+
+func jump():
+	# Set vertical velocity to jump velocity
+	velocity.y = jump_velocity
+	# Disable jumping until reset
+	can_jump = false
+	# Start jump reset timer
+	jump_reset_timer = jump_reset_delay
+
+func _setup_ground_raycast():
+	# Configure the ground raycast to point downward
+	ground_raycast.target_position = Vector2(0, 15)  # Cast 20 pixels downward
+	ground_raycast.enabled = true
+	ground_raycast.collision_mask = 1  # Only collide with layer 1 (default collision layer)
+
+func _check_jump_reset():
+	# Reset jump only if the ground raycast detects a collision (feet touching ground)
+	if ground_raycast.is_colliding():
+		# Only reset if the timer has expired (prevents immediate re-jump)
+		if jump_reset_timer <= 0:
+			can_jump = true
 
 func shoot():
 	if can_shoot:

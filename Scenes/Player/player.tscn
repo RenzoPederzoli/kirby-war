@@ -129,6 +129,7 @@ _data = {
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_a3d8c")
+jump_velocity = -275.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("3_mtuoh")
@@ -147,3 +148,7 @@ libraries = {
 [node name="ProjSpawnPoint" type="Marker2D" parent="."]
 position = Vector2(0, -10)
 gizmo_extents = 28.2
+
+[node name="GroundRayCast" type="RayCast2D" parent="."]
+position = Vector2(0, 4)
+target_position = Vector2(0, 20)
