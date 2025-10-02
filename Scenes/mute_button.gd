@@ -1,6 +1,6 @@
 extends Button
 
-var is_muted: bool = false
+var is_muted: bool = true
 
 func _ready() -> void:
     text = "Mute"
