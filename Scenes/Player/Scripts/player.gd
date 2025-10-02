@@ -48,6 +48,9 @@ func _physics_process(delta):
 	# Handle shooting input
 	_handle_shooting_input()
 	
+	# Handle screen wrapping
+	_handle_screen_wrapping()
+	
 	move_and_slide()
 
 func _handle_momentum_movement(direction: float, delta: float):
@@ -71,6 +74,18 @@ func _handle_shooting_input():
 	# Check if left mouse button or up arrow is pressed
 	if Input.is_action_pressed("fire") or Input.is_action_pressed("ui_up"):  # Using fire action for left click, ui_up as up arrow
 		shoot();
+
+func _handle_screen_wrapping():
+	# Get the viewport size
+	var viewport_size = get_viewport().get_visible_rect().size
+	
+	# Check if player has gone off the left edge
+	if global_position.x < 0:
+		global_position.x = viewport_size.x
+	
+	# Check if player has gone off the right edge
+	elif global_position.x > viewport_size.x:
+		global_position.x = 0
 
 func shoot():
 	if can_shoot:

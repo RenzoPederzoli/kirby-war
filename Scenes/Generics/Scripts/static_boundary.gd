@@ -7,6 +7,7 @@ enum BoundaryType { FLOOR, LEFT_WALL, RIGHT_WALL }
 @export var boundary_thickness = 32.0
 @export var position_at_edge = true
 @export var viewport_padding = 16.0
+@export var overflow_padding = 64.0
 
 func _ready():
 	if expand_to_viewport:
@@ -36,8 +37,9 @@ func resize_to_viewport():
 	
 	match boundary_type:
 		BoundaryType.FLOOR:
-			# Expand horizontally to fill viewport width
-			var scale_x = viewport_size.x / base_width
+			# Expand horizontally to fill viewport width plus overflow padding
+			var total_width = viewport_size.x + (overflow_padding * 2)
+			var scale_x = total_width / base_width
 			var scale_y = boundary_thickness / base_height
 			scale = Vector2(scale_x, scale_y)
 			

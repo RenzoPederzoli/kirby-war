@@ -4,14 +4,16 @@
 [ext_resource type="Script" uid="uid://c10jx31e4r7c" path="res://Scenes/Props/Scripts/BasePellet.gd" id="1_rcuc8"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rcuc8"]
-radius = 5.0
+radius = 2.0
 
 [node name="BasePellet" type="Area2D"]
 script = ExtResource("1_rcuc8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(1.72, 1.72)
 shape = SubResource("CircleShape2D_rcuc8")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(1, 0)
+position = Vector2(3.55271e-15, 0)
+scale = Vector2(0.693101, 0.693101)
 texture = ExtResource("1_3ld38")

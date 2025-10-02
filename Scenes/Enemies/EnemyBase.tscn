@@ -8,12 +8,14 @@ friction = 0.0
 bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pu86i"]
-radius = 18.0
+radius = 9.05539
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p6c21"]
-radius = 20.0
+radius = 10.0499
 
 [node name="EnemyBase" type="RigidBody2D"]
+collision_layer = 3
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_p6c21")
 gravity_scale = 0.07
 can_sleep = false
@@ -24,6 +26,7 @@ script = ExtResource("1_p6c21")
 shape = SubResource("CircleShape2D_pu86i")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.507017, 0.507017)
 texture = ExtResource("2_srcxp")
 
 [node name="TouchDamage" type="Area2D" parent="."]
