@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://c2focjmk5efg4" path="res://Scenes/Player/Animations/Frostblade_Idle_Animation-Sheet.png" id="3_mtuoh"]
 [ext_resource type="Texture2D" uid="uid://xde1txuj5wpw" path="res://Scenes/Player/Animations/Frostblade_Skate_Animation-Sheet.png" id="4_mtuoh"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_xpcdj"]
-radius = 12.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xpcdj"]
+radius = 8.0
 
 [sub_resource type="Animation" id="Animation_mtuoh"]
 length = 0.001
@@ -136,8 +136,8 @@ region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 4)
-shape = SubResource("CircleShape2D_xpcdj")
+position = Vector2(0, 1)
+shape = SubResource("CapsuleShape2D_xpcdj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

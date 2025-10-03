@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://buh06gdv7ep1h"]
+[gd_scene load_steps=9 format=3 uid="uid://buh06gdv7ep1h"]
 
 [ext_resource type="Script" uid="uid://oxcyahdyi0ko" path="res://Scenes/main.gd" id="1_8gbba"]
 [ext_resource type="PackedScene" uid="uid://dnvl5s8x0rc60" path="res://Scenes/Player/player.tscn" id="1_jjgbg"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://dui88d7lvidba" path="res://Scenes/Generics/Assets/Frostblade_Main_OST.mp3" id="5_kry3j"]
 [ext_resource type="FontFile" uid="uid://crlxvfswysy4v" path="res://Scenes/Generics/Assets/Belleza-Regular.ttf" id="6_6bp64"]
 [ext_resource type="Script" uid="uid://cmfoqiicfj2us" path="res://Scenes/mute_button.gd" id="6_21xkr"]
+[ext_resource type="Script" uid="uid://cts37mm4r7th1" path="res://Scenes/Scripts/background_scaling.gd" id="7_scaling"]
 
 [node name="SceneRoot" type="Node2D"]
 script = ExtResource("1_8gbba")
@@ -16,6 +17,8 @@ position = Vector2(162, 127)
 
 [node name="Floor" parent="." instance=ExtResource("2_bo1nx")]
 position = Vector2(162, 161)
+collision_layer = 3
+collision_mask = 3
 boundary_thickness = 16.0
 
 [node name="LeftWall" parent="." instance=ExtResource("2_bo1nx")]
@@ -41,9 +44,8 @@ position = Vector2(162, 3)
 z_index = -10
 texture_filter = 1
 texture_repeat = 1
-position = Vector2(160, 89)
-scale = Vector2(1.66588, 1.66588)
 texture = ExtResource("4_6bp64")
+script = ExtResource("7_scaling")
 
 [node name="BackgroundTrack" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_kry3j")

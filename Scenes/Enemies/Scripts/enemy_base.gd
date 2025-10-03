@@ -8,7 +8,7 @@ class_name EnemyBase
 @export var max_spawn_speed: float = 120.0     # random ±deg on bounce to vary direction
 
 @export var min_speed: float = 75.0
-@export var keepalive_jitter_deg: float = 3.0
+@export var keepalive_jitter_deg: float = 2.0
 
 var health: int
 
@@ -51,6 +51,5 @@ func die() -> void:
     queue_free()
 
 func _on_touch_damage_body_entered(body: Node) -> void:
-    # TODO: Player contact damage; define your own API on the player
     if body.has_method("apply_enemy_contact"):
         body.apply_enemy_contact(self, contact_damage)

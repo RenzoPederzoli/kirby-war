@@ -191,3 +191,6 @@ func shoot():
 		can_shoot = false
 		await get_tree().create_timer(fire_rate).timeout
 		can_shoot = true
+
+func apply_enemy_contact(enemy: Node2D, damage: int):
+	print("Player hit by enemy: ", enemy.name, " with damage: ", damage);
