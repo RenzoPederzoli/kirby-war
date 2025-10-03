@@ -7,6 +7,9 @@ class_name EnemyBase
 @export var min_spawn_speed: float = 80.0
 @export var max_spawn_speed: float = 120.0     # random ±deg on bounce to vary direction
 
+@export var min_speed: float = 75.0
+@export var keepalive_jitter_deg: float = 3.0
+
 var health: int
 
 @onready var touch_damage: Area2D = $TouchDamage
@@ -21,6 +24,15 @@ func _ready() -> void:
     var spawn_speed := randf_range(min_spawn_speed, max_spawn_speed)
     var dir := Vector2.RIGHT.rotated(angle)   # unit direction vector
     set_initial_velocity(dir * spawn_speed)
+
+func _physics_process(_delta: float) -> void:
+    var v := linear_velocity
+    var speed := v.length()
+    if speed < min_speed:
+        var dir := v.normalized() if speed > 0.0 else Vector2.RIGHT.rotated(randf() * TAU)
+        # small random nudge so it doesn’t stick on edges
+        var jitter := deg_to_rad(randf_range(-keepalive_jitter_deg, keepalive_jitter_deg))
+        linear_velocity = dir.rotated(jitter) * min_speed
 
 func set_initial_velocity(v: Vector2) -> void:
     linear_velocity = v

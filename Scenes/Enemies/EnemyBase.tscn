@@ -17,9 +17,9 @@ radius = 10.0499
 collision_layer = 3
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_p6c21")
-gravity_scale = 0.07
+gravity_scale = 0.2
 can_sleep = false
-continuous_cd = 2
+continuous_cd = 1
 script = ExtResource("1_p6c21")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

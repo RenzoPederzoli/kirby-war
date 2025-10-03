@@ -1,11 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://bl171iapq1ltc"]
+[gd_scene load_steps=4 format=3 uid="uid://bl171iapq1ltc"]
 
 [ext_resource type="Script" uid="uid://fi7wr7g5tjik" path="res://Scenes/Generics/Scripts/static_boundary.gd" id="1_script"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_51oy2"]
+friction = 0.0
+bounce = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iwaan"]
 size = Vector2(64, 32)
 
 [node name="Floor" type="StaticBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_51oy2")
 script = ExtResource("1_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

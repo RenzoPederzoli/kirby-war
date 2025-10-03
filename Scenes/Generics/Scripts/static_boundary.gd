@@ -49,9 +49,10 @@ func resize_to_viewport():
 				position.x = viewport_size.x / 2
 				
 		BoundaryType.LEFT_WALL:
-			# Expand vertically to fill viewport height
+			# Expand vertically to fill viewport height plus overflow padding
+			var total_height = viewport_size.y + (overflow_padding * 2)
 			var scale_x = boundary_thickness / base_width
-			var scale_y = viewport_size.y / base_height
+			var scale_y = total_height / base_height
 			scale = Vector2(scale_x, scale_y)
 			
 			if position_at_edge:
@@ -60,9 +61,10 @@ func resize_to_viewport():
 				position.y = viewport_size.y / 2
 				
 		BoundaryType.RIGHT_WALL:
-			# Expand vertically to fill viewport height
+			# Expand vertically to fill viewport height plus overflow padding
+			var total_height = viewport_size.y + (overflow_padding * 2)
 			var scale_x = boundary_thickness / base_width
-			var scale_y = viewport_size.y / base_height
+			var scale_y = total_height / base_height
 			scale = Vector2(scale_x, scale_y)
 			
 			if position_at_edge:
