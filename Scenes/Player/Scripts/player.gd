@@ -32,6 +32,14 @@ var pre_brake_velocity = 0.0
 var brake_timer = 0.0
 var brake_duration = 0.5  # Brake duration in seconds
 
+# Damage and invincibility variables
+var is_invincible = false
+var invincibility_timer = 0.0
+var invincibility_duration = 1.2  # Total invincibility duration
+var flicker_timer = 0.0
+var flicker_interval = 0.05  # How fast to flicker
+var is_flickering = false
+
 # Get the gravity from the project settings to be synced with RigidBody nodes
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -51,6 +59,15 @@ func _physics_process(delta):
 	if is_braking:
 		brake_timer += delta
 	
+	# Update invincibility timer
+	if is_invincible:
+		invincibility_timer -= delta
+		_handle_invincibility_flicker(delta)
+		if invincibility_timer <= 0:
+			is_invincible = false
+			is_flickering = false
+			sprite.modulate.a = 1.0  # Reset alpha to fully visible
+	
 	# Add gravity
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -58,15 +75,16 @@ func _physics_process(delta):
 	# Handle left/right movement using input map actions
 	var direction = Input.get_axis("ui_left", "ui_right")
 
-	# Update animation
-	if direction != 0:
-		animation_player.play("move")
-		# Flip sprite based on movement direction
-		sprite.flip_h = direction < 0
-	elif direction == 0 and velocity.x != 0:
-		animation_player.play("braking")
-	else:
-		animation_player.play("idle")
+	# Update animation (but don't override damage animation)
+	if not animation_player.is_playing() or animation_player.current_animation != "take_damage":
+		if direction != 0:
+			animation_player.play("move")
+			# Flip sprite based on movement direction
+			sprite.flip_h = direction < 0
+		elif direction == 0 and velocity.x != 0:
+			animation_player.play("braking")
+		else:
+			animation_player.play("idle")
 	
 	# Handle momentum-based horizontal movement
 	_handle_momentum_movement(direction, delta)
@@ -193,4 +211,33 @@ func shoot():
 		can_shoot = true
 
 func apply_enemy_contact(enemy: Node2D, damage: int):
-	print("Player hit by enemy: ", enemy.name, " with damage: ", damage);
+	# Only take damage if not invincible
+	if not is_invincible:
+		print("Player hit by enemy: ", enemy.name, " with damage: ", damage)
+		
+		# Start invincibility period
+		is_invincible = true
+		invincibility_timer = invincibility_duration
+		
+		# Play damage animation
+		animation_player.play("take_damage")
+		
+		# Get the actual duration of the damage animation
+		var damage_animation_duration = animation_player.get_animation("take_damage").length
+		
+		# Start flickering after damage animation ends
+		await get_tree().create_timer(damage_animation_duration).timeout
+		if is_invincible:  # Only start flickering if still invincible
+			is_flickering = true
+
+func _handle_invincibility_flicker(delta: float):
+	# Only flicker during the remaining invincibility time after damage animation
+	if is_flickering:
+		flicker_timer += delta
+		if flicker_timer >= flicker_interval:
+			flicker_timer = 0.0
+			# Toggle sprite visibility
+			if sprite.modulate.a == 1.0:
+				sprite.modulate.a = 0.1  # Make semi-transparent
+			else:
+				sprite.modulate.a = 1.0  # Make fully visible

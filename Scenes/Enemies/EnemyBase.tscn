@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://d25v66o1mgo2h"]
+[gd_scene load_steps=7 format=3 uid="uid://d25v66o1mgo2h"]
 
 [ext_resource type="Script" uid="uid://cw80t024lr7ry" path="res://Scenes/Enemies/Scripts/enemy_base.gd" id="1_p6c21"]
 [ext_resource type="Texture2D" uid="uid://cdi20j3ov288k" path="res://Scenes/Enemies/Assets/base_enemy.png" id="2_srcxp"]
+[ext_resource type="Texture2D" uid="uid://doe0qnjgjjtju" path="res://Scenes/Enemies/Assets/Shatter_projectile_hitmarker.png" id="3_srcxp"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_p6c21"]
 friction = 0.0
@@ -33,3 +34,8 @@ texture = ExtResource("2_srcxp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TouchDamage"]
 shape = SubResource("CircleShape2D_p6c21")
+
+[node name="HitmarkerSprite" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.52, 0.52)
+texture = ExtResource("3_srcxp")

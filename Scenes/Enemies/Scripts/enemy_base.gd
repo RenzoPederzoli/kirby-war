@@ -1,7 +1,7 @@
 extends RigidBody2D
 class_name EnemyBase
 
-@export var max_health: int = 20
+@export var max_health: int = 50
 @export var contact_damage: int = 5
 
 @export var min_spawn_speed: float = 80.0
@@ -13,43 +13,54 @@ class_name EnemyBase
 var health: int
 
 @onready var touch_damage: Area2D = $TouchDamage
+@onready var hitmarker_sprite: Sprite2D = $HitmarkerSprite
 
 func _ready() -> void:
-    health = max_health
-    if is_instance_valid(touch_damage):
-        touch_damage.body_entered.connect(_on_touch_damage_body_entered);
+	health = max_health
+	if is_instance_valid(touch_damage):
+		touch_damage.body_entered.connect(_on_touch_damage_body_entered);
 
-    # Randomize initial velocity
-    var angle := randf_range(0.05, PI - 0.05) # small margin to avoid perfectly horizontal
-    var spawn_speed := randf_range(min_spawn_speed, max_spawn_speed)
-    var dir := Vector2.RIGHT.rotated(angle)   # unit direction vector
-    set_initial_velocity(dir * spawn_speed)
+	# Randomize initial velocity
+	var angle := randf_range(0.05, PI - 0.05) # small margin to avoid perfectly horizontal
+	var spawn_speed := randf_range(min_spawn_speed, max_spawn_speed)
+	var dir := Vector2.RIGHT.rotated(angle)   # unit direction vector
+	set_initial_velocity(dir * spawn_speed)
 
 func _physics_process(_delta: float) -> void:
-    var v := linear_velocity
-    var speed := v.length()
-    if speed < min_speed:
-        var dir := v.normalized() if speed > 0.0 else Vector2.RIGHT.rotated(randf() * TAU)
-        # small random nudge so it doesn’t stick on edges
-        var jitter := deg_to_rad(randf_range(-keepalive_jitter_deg, keepalive_jitter_deg))
-        linear_velocity = dir.rotated(jitter) * min_speed
+	var v := linear_velocity
+	var speed := v.length()
+	if speed < min_speed:
+		var dir := v.normalized() if speed > 0.0 else Vector2.RIGHT.rotated(randf() * TAU)
+		# small random nudge so it doesn’t stick on edges
+		var jitter := deg_to_rad(randf_range(-keepalive_jitter_deg, keepalive_jitter_deg))
+		linear_velocity = dir.rotated(jitter) * min_speed
 
 func set_initial_velocity(v: Vector2) -> void:
-    linear_velocity = v
+	linear_velocity = v
 
 # Called by your pellet (see your BasePellet.fire/impact flow)
 func apply_pellet_hit(pellet: Node) -> void:
-    if "damage" in pellet:
-        _take_damage(pellet.damage)
+	if "damage" in pellet:
+		_take_damage(pellet.damage)
 
 func _take_damage(amount: int) -> void:
-    health -= amount
-    if health <= 0:
-        die()
+	health -= amount
+	_flash_hitmarker()
+	if health <= 0:
+		die()
 
 func die() -> void:
-    queue_free()
+	queue_free()
 
 func _on_touch_damage_body_entered(body: Node) -> void:
-    if body.has_method("apply_enemy_contact"):
-        body.apply_enemy_contact(self, contact_damage)
+	if body.has_method("apply_enemy_contact"):
+		body.apply_enemy_contact(self, contact_damage)
+
+func _flash_hitmarker() -> void:
+	if is_instance_valid(hitmarker_sprite):
+		# Show the hitmarker sprite
+		hitmarker_sprite.visible = true
+		
+		# Create a tween to hide it after a short duration
+		var tween = create_tween()
+		tween.tween_callback(func(): hitmarker_sprite.visible = false).set_delay(0.1)
