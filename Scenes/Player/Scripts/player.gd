@@ -29,8 +29,9 @@ var jump_reset_delay = 0.1  # Small delay to prevent jump spam
 # Braking state variables
 var is_braking = false
 var pre_brake_velocity = 0.0
+var min_brake_velocity = 10.0  # Minimum velocity required to start braking
+var brake_duration = 0.4  # Duration of the brake action
 var brake_timer = 0.0
-var brake_duration = 0.5  # Brake duration in seconds
 
 # Damage and invincibility variables
 var is_invincible = false
@@ -39,6 +40,9 @@ var invincibility_duration = 1.2  # Total invincibility duration
 var flicker_timer = 0.0
 var flicker_interval = 0.05  # How fast to flicker
 var is_flickering = false
+
+# Brake animation tracking
+var brake_animation_played = false
 
 # Get the gravity from the project settings to be synced with RigidBody nodes
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -77,14 +81,26 @@ func _physics_process(delta):
 
 	# Update animation (but don't override damage animation)
 	if not animation_player.is_playing() or animation_player.current_animation != "take_damage":
-		if direction != 0:
-			animation_player.play("move")
-			# Flip sprite based on movement direction
-			sprite.flip_h = direction < 0
-		elif direction == 0 and velocity.x != 0:
-			animation_player.play("braking")
+		if is_braking:
+			# Play brake animation only once when braking starts
+			if not brake_animation_played:
+				animation_player.play("brake")
+				brake_animation_played = true
+			# Handle sprite flipping during braking
+			if direction != 0:
+				sprite.flip_h = direction < 0
 		else:
-			animation_player.play("idle")
+			# Reset brake animation flag when not braking
+			brake_animation_played = false
+			
+			if direction != 0:
+				animation_player.play("move")
+				# Flip sprite based on movement direction
+				sprite.flip_h = direction < 0
+			elif direction == 0 and velocity.x != 0:
+				animation_player.play("sliding")
+			else:
+				animation_player.play("idle")
 	
 	# Handle momentum-based horizontal movement
 	_handle_momentum_movement(direction, delta)
@@ -131,25 +147,21 @@ func _handle_momentum_movement(direction: float, delta: float):
 		# If in air, maintain current horizontal velocity (no deceleration)
 
 func _handle_braking_input(delta: float):
-	# Check if brake action is pressed (Shift key) and we're on the ground
-	if Input.is_action_pressed("brake") and is_on_floor():
-		if not is_braking:
-			# Start braking - store current velocity and reset timer
+	if Input.is_action_just_pressed("brake") and is_on_floor():
+		# Only allow braking if we have sufficient velocity and not already braking
+		if abs(velocity.x) >= min_brake_velocity and not is_braking:
 			is_braking = true
 			pre_brake_velocity = velocity.x
 			brake_timer = 0.0
-		
-		# Check if brake duration has expired
+	
+	# Apply braking force during the brake duration
+	if is_braking:
+		# Apply moderate braking that preserves some momentum
+		var target_velocity = pre_brake_velocity * brake_momentum_preservation
+		velocity.x = move_toward(velocity.x, target_velocity, deceleration * brake_strength * delta)
+				
+		# Stop braking after duration expires
 		if brake_timer >= brake_duration:
-			# Stop braking after duration expires
-			is_braking = false
-		else:
-			# Apply ice skating brake - preserve some momentum
-			var target_velocity = pre_brake_velocity * brake_momentum_preservation
-			velocity.x = move_toward(velocity.x, target_velocity, deceleration * brake_strength * delta)
-	else:
-		if is_braking:
-			# Stop braking - enable quick acceleration
 			is_braking = false
 
 func _handle_jumping_input():
