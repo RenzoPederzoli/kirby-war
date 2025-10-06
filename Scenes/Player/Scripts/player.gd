@@ -81,26 +81,33 @@ func _physics_process(delta):
 
 	# Update animation (but don't override damage animation)
 	if not animation_player.is_playing() or animation_player.current_animation != "take_damage":
-		if is_braking:
+		# Check if player is airborne (jumping/falling)
+		if not is_on_floor():
+			if velocity.y < 0:
+				# Rising (moving upward)
+				animation_player.play("rise")
+			else:
+				# Falling (moving downward)
+				animation_player.play("fall")
+		elif is_braking:
 			# Play brake animation only once when braking starts
 			if not brake_animation_played:
 				animation_player.play("brake")
 				brake_animation_played = true
-			# Handle sprite flipping during braking
-			if direction != 0:
-				sprite.flip_h = direction < 0
 		else:
 			# Reset brake animation flag when not braking
 			brake_animation_played = false
 			
 			if direction != 0:
 				animation_player.play("move")
-				# Flip sprite based on movement direction
-				sprite.flip_h = direction < 0
 			elif direction == 0 and velocity.x != 0:
 				animation_player.play("sliding")
 			else:
 				animation_player.play("idle")
+	
+	# Handle sprite flipping
+	if direction != 0:
+		sprite.flip_h = direction < 0
 	
 	# Handle momentum-based horizontal movement
 	_handle_momentum_movement(direction, delta)
