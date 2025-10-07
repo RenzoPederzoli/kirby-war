@@ -77,6 +77,15 @@ var invincibility_duration: float = 1.2
 ## Interval between flicker state changes during invincibility
 var flicker_interval: float = 0.05
 
+## Force applied to player when knocked back by enemies
+@export var knockback_force: float = 150.0
+
+## Intensity of screen shake when taking damage (0.0 = no shake, 1.0 = maximum)
+@export var screen_shake_intensity: float = 0.5
+
+## Duration of screen shake effect in seconds
+@export var screen_shake_duration: float = 0.4
+
 # =============================================================================
 # RUNTIME STATE
 # =============================================================================
@@ -114,6 +123,16 @@ var flicker_timer: float = 0.0
 ## Whether the brake animation has been played for the current brake
 var brake_animation_played: bool = false
 
+
+## Whether screen shake is currently active
+var is_screen_shaking: bool = false
+
+## Timer tracking screen shake duration
+var screen_shake_timer: float = 0.0
+
+## Original camera position for screen shake
+var original_camera_position: Vector2 = Vector2.ZERO
+
 ## Gravity value from project settings
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -131,6 +150,7 @@ func _physics_process(delta: float):
 	"""Main physics update loop handling movement, input, and state management."""
 	_update_timers(delta)
 	_apply_gravity()
+	_handle_screen_shake(delta)
 	_handle_animation()
 	_handle_sprite_direction()
 	_handle_movement_input(delta)
@@ -150,6 +170,12 @@ func _update_timers(delta: float):
 	if is_braking:
 		brake_timer += delta
 	
+	if is_screen_shaking:
+		screen_shake_timer -= delta
+		if screen_shake_timer <= 0:
+			is_screen_shaking = false
+			_reset_camera_position()
+	
 	if is_invincible:
 		invincibility_timer -= delta
 		_handle_invincibility_flicker(delta)
@@ -166,6 +192,17 @@ func _apply_gravity():
 	"""Apply gravity when the player is not on the ground."""
 	if not is_on_floor():
 		velocity.y += gravity * get_physics_process_delta_time()
+
+
+func _handle_screen_shake(_delta: float):
+	"""Handle screen shake effect by offsetting the viewport."""
+	if is_screen_shaking:
+		var shake_intensity = (screen_shake_timer / screen_shake_duration) * screen_shake_intensity
+		var shake_offset = Vector2(
+			randf_range(-shake_intensity, shake_intensity),
+			randf_range(-shake_intensity, shake_intensity)
+		)
+		get_viewport().canvas_transform.origin = original_camera_position + shake_offset
 
 func _handle_movement_input(delta: float):
 	"""Process all movement-related input and apply movement logic."""
@@ -290,10 +327,17 @@ func shoot():
 		can_shoot = true
 
 func apply_enemy_contact(enemy: Node2D, damage: int):
-	"""Handle damage from enemy contact with invincibility frames."""
+	"""Handle damage from enemy contact with invincibility frames, knockback, and screen shake."""
 	if not is_invincible:
 		print("Player hit by enemy: ", enemy.name, " with damage: ", damage)
 		
+		# Apply knockback
+		_apply_knockback(enemy)
+		
+		# Start screen shake
+		_start_screen_shake()
+		
+		# Start invincibility
 		is_invincible = true
 		invincibility_timer = invincibility_duration
 		animation_player.play("take_damage")
@@ -324,3 +368,26 @@ func _setup_ground_raycast():
 	ground_raycast.target_position = Vector2(0, 15)
 	ground_raycast.enabled = true
 	ground_raycast.collision_mask = 1
+
+func _apply_knockback(enemy: Node2D):
+	"""Apply one-shot knockback force away from the enemy."""
+	var direction_to_enemy = (enemy.global_position - global_position).normalized()
+	var knockback_direction = -direction_to_enemy  # Push away from enemy
+	
+	# Only apply horizontal knockback (preserve vertical movement)
+	knockback_direction.y = 0.0
+	knockback_direction = knockback_direction.normalized()
+	
+	# Apply immediate knockback force to velocity
+	velocity.x = knockback_direction.x * knockback_force
+
+func _start_screen_shake():
+	"""Start the screen shake effect."""
+	if not is_screen_shaking:
+		original_camera_position = get_viewport().canvas_transform.origin
+		is_screen_shaking = true
+		screen_shake_timer = screen_shake_duration
+
+func _reset_camera_position():
+	"""Reset the camera to its original position after screen shake."""
+	get_viewport().canvas_transform.origin = original_camera_position
