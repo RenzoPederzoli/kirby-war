@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://buh06gdv7ep1h"]
+[gd_scene load_steps=10 format=3 uid="uid://buh06gdv7ep1h"]
 
 [ext_resource type="Script" uid="uid://oxcyahdyi0ko" path="res://Scenes/main.gd" id="1_8gbba"]
 [ext_resource type="PackedScene" uid="uid://dnvl5s8x0rc60" path="res://Scenes/Player/player.tscn" id="1_jjgbg"]
@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://crlxvfswysy4v" path="res://Scenes/Generics/Assets/Belleza-Regular.ttf" id="6_6bp64"]
 [ext_resource type="Script" uid="uid://cmfoqiicfj2us" path="res://Scenes/mute_button.gd" id="6_21xkr"]
 [ext_resource type="Script" uid="uid://cts37mm4r7th1" path="res://Scenes/Scripts/background_scaling.gd" id="7_scaling"]
+[ext_resource type="PackedScene" uid="uid://biaa5kwwx28k3" path="res://Scenes/UI/XPBar.tscn" id="8_xpbar"]
 
 [node name="SceneRoot" type="Node2D"]
 script = ExtResource("1_8gbba")
@@ -67,3 +68,5 @@ theme_override_font_sizes/font_size = 6
 shortcut_feedback = false
 flat = true
 script = ExtResource("6_21xkr")
+
+[node name="XPBar" parent="CanvasLayer" instance=ExtResource("8_xpbar")]

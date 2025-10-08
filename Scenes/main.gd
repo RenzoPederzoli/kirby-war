@@ -2,12 +2,18 @@ extends Node2D
 
 @onready var enemy_spawn_point: Marker2D = $EnemySpawnDebug
 @onready var background_track: AudioStreamPlayer = $BackgroundTrack
+@onready var player: CharacterBody2D = $Player
+@onready var xp_bar: XPBar = $CanvasLayer/XPBar
 
 var enemy_scene: PackedScene
 
 func _ready():
 	# Load the enemy scene
 	enemy_scene = preload("res://Scenes/Enemies/EnemyBase.tscn")
+	
+	# Connect XP bar to player leveling system
+	if player and player.leveling_system and xp_bar:
+		xp_bar.setup(player.leveling_system)
 	
 	# Start spawning enemies every 15 seconds
 	spawn_enemy()
