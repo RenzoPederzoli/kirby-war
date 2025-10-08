@@ -24,6 +24,11 @@ extends CharacterBody2D
 @export var screen_shake_intensity: float = 0.5
 @export var screen_shake_duration: float = 0.4
 
+# Leveling System Exports
+@export_group("Leveling")
+@export var base_exp_required: int = 50
+@export var exp_multiplier: float = 1.2
+
 # =============================================================================
 # SYSTEM COMPONENTS
 # =============================================================================
@@ -32,6 +37,7 @@ var movement_system
 var combat_system
 var animation_system
 var effects_system
+var leveling_system
 
 # =============================================================================
 # GODOT LIFECYCLE
@@ -39,11 +45,15 @@ var effects_system
 
 func _ready():
 	"""Initialize the player character and all system components."""
+	# Add player to group for easy access by enemies
+	add_to_group("player")
+	
 	# Initialize all systems
 	movement_system = preload("res://Scenes/Player/Scripts/PlayerMovement.gd").new(self)
 	combat_system = preload("res://Scenes/Player/Scripts/PlayerCombat.gd").new(self)
 	animation_system = preload("res://Scenes/Player/Scripts/PlayerAnimation.gd").new(self)
 	effects_system = preload("res://Scenes/Player/Scripts/PlayerEffects.gd").new(self)
+	leveling_system = preload("res://Scenes/Player/Scripts/PlayerLeveling.gd").new(self)
 	
 	# Pass exported values to systems
 	_configure_systems()
@@ -66,6 +76,11 @@ func _configure_systems():
 	effects_system.knockback_force = knockback_force
 	effects_system.screen_shake_intensity = screen_shake_intensity
 	effects_system.screen_shake_duration = screen_shake_duration
+	
+	# Configure leveling system
+	leveling_system.base_exp_required = base_exp_required
+	leveling_system.exp_multiplier = exp_multiplier
+	leveling_system.initialize()
 
 func _physics_process(delta: float):
 	"""Main physics update loop - delegates to system components."""
@@ -92,6 +107,10 @@ func apply_enemy_contact(enemy: Node2D, damage: int):
 	"""Handle damage from enemy contact - delegates to effects system."""
 	effects_system.apply_enemy_contact(enemy, damage, animation_system)
 
+func on_enemy_defeated(xp_amount: int):
+	"""Handle enemy defeat - delegates to leveling system."""
+	leveling_system.gain_experience(xp_amount)
+
 # =============================================================================
 # SYSTEM ACCESS (for external systems that need to query player state)
 # =============================================================================
@@ -103,3 +122,15 @@ func is_invincible() -> bool:
 func is_braking() -> bool:
 	"""Check if the player is currently braking."""
 	return movement_system.is_player_braking()
+
+func get_level() -> int:
+	"""Get the current player level."""
+	return leveling_system.get_current_level()
+
+func get_experience() -> int:
+	"""Get the current experience points."""
+	return leveling_system.get_current_exp()
+
+func get_exp_to_next_level() -> int:
+	"""Get experience required for the next level."""
+	return leveling_system.get_exp_to_next_level()

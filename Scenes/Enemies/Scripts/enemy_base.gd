@@ -3,6 +3,7 @@ class_name EnemyBase
 
 @export var max_health: int = 50
 @export var contact_damage: int = 5
+@export var xp_reward: int = 25
 
 @export var min_spawn_speed: float = 80.0
 @export var max_spawn_speed: float = 120.0     # random ±deg on bounce to vary direction
@@ -50,6 +51,11 @@ func _take_damage(amount: int) -> void:
 		die()
 
 func die() -> void:
+	# Notify the player that this enemy was defeated and give XP
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("on_enemy_defeated"):
+		player.on_enemy_defeated(xp_reward)
+	
 	queue_free()
 
 func _on_touch_damage_body_entered(body: Node) -> void:

@@ -9,7 +9,7 @@ class_name PlayerEffects
 # =============================================================================
 
 ## Force applied to player when knocked back by enemies
-var knockback_force: float = 150.0
+var knockback_force: float
 
 ## Total duration of invincibility after taking damage
 var invincibility_duration: float = 1.2
@@ -18,10 +18,10 @@ var invincibility_duration: float = 1.2
 var flicker_interval: float = 0.05
 
 ## Intensity of screen shake when taking damage (0.0 = no shake, 1.0 = maximum)
-var screen_shake_intensity: float = 0.5
+var screen_shake_intensity: float
 
 ## Duration of screen shake effect in seconds
-var screen_shake_duration: float = 0.4
+var screen_shake_duration: float
 
 # =============================================================================
 # RUNTIME STATE
