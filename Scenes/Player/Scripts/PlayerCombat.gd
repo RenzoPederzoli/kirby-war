@@ -59,6 +59,9 @@ func shoot():
 		pellet.global_position = pellet_spawn_point.global_position
 		pellet.fire(Vector2.UP)
 		
+		# Emit signal to notify other systems
+		player.player_shot.emit()
+		
 		can_shoot = false
 		await player.get_tree().create_timer(fire_rate).timeout
 		can_shoot = true

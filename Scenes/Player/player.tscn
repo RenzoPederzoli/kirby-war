@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dnvl5s8x0rc60"]
+[gd_scene load_steps=19 format=3 uid="uid://dnvl5s8x0rc60"]
 
 [ext_resource type="Script" uid="uid://b0bppoxoc5usm" path="res://Scenes/Player/Scripts/player.gd" id="1_a3d8c"]
 [ext_resource type="Texture2D" uid="uid://c2focjmk5efg4" path="res://Scenes/Player/Animations/Frostblade_Idle_Animation-Sheet.png" id="3_mtuoh"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dverusom11mt8" path="res://Scenes/Player/Animations/Frostblade_Brake_Animation-Sheet.png" id="5_htcer"]
 [ext_resource type="Texture2D" uid="uid://cfwhhjmp8p35p" path="res://Scenes/Player/Animations/Frostblade_Rise_Frame.png" id="6_dd0ac"]
 [ext_resource type="Texture2D" uid="uid://ckn0evkej6fuq" path="res://Scenes/Player/Animations/Frostblade_Fall_Frame.png" id="7_0u5uq"]
+[ext_resource type="Texture2D" uid="uid://l4wcvi6yq271" path="res://Scenes/Player/Assets/Wand.png" id="8_jlvik"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xpcdj"]
 radius = 8.0
@@ -268,9 +269,14 @@ libraries = {
 }
 
 [node name="ProjSpawnPoint" type="Marker2D" parent="."]
-position = Vector2(0, -10)
+position = Vector2(0, -26)
 gizmo_extents = 28.2
 
 [node name="GroundRayCast" type="RayCast2D" parent="."]
 position = Vector2(0, 4)
 target_position = Vector2(0, 20)
+
+[node name="WandSprite" type="Sprite2D" parent="."]
+position = Vector2(1, -20)
+scale = Vector2(0.406608, 0.406608)
+texture = ExtResource("8_jlvik")

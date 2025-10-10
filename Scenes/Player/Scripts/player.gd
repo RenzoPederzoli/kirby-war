@@ -4,6 +4,13 @@ extends CharacterBody2D
 ## Delegates functionality to specialized system classes for better organization and maintainability.
 
 # =============================================================================
+# SIGNALS
+# =============================================================================
+
+## Emitted when the player shoots
+signal player_shot
+
+# =============================================================================
 # EXPORTED VARIABLES (Delegated to Systems)
 # =============================================================================
 
@@ -57,6 +64,9 @@ func _ready():
 	
 	# Pass exported values to systems
 	_configure_systems()
+	
+	# Connect signals
+	player_shot.connect(_on_player_shot)
 	
 	# Start with idle animation
 	animation_system.update_animation(movement_system)
@@ -134,3 +144,11 @@ func get_experience() -> int:
 func get_exp_to_next_level() -> int:
 	"""Get experience required for the next level."""
 	return leveling_system.get_exp_to_next_level()
+
+# =============================================================================
+# SIGNAL HANDLERS
+# =============================================================================
+
+func _on_player_shot():
+	"""Handle player shot signal - notify effects system."""
+	effects_system.on_player_shoot()

@@ -23,6 +23,9 @@ var screen_shake_intensity: float
 ## Duration of screen shake effect in seconds
 var screen_shake_duration: float
 
+## Duration the wand sprite remains visible when shooting
+var wand_visibility_duration: float = 0.5
+
 # =============================================================================
 # RUNTIME STATE
 # =============================================================================
@@ -48,12 +51,19 @@ var screen_shake_timer: float = 0.0
 ## Original camera position for screen shake
 var original_camera_position: Vector2 = Vector2.ZERO
 
+## Whether the wand sprite is currently visible
+var is_wand_visible: bool = false
+
+## Timer tracking wand visibility duration
+var wand_visibility_timer: float = 0.0
+
 # =============================================================================
 # NODE REFERENCES
 # =============================================================================
 
 var player: CharacterBody2D
 var sprite: Sprite2D
+var wand_sprite: Sprite2D
 
 # =============================================================================
 # INITIALIZATION
@@ -63,6 +73,7 @@ func _init(player_node: CharacterBody2D):
 	"""Initialize the effects system with a reference to the player."""
 	player = player_node
 	sprite = player.get_node("Sprite2D")
+	wand_sprite = player.get_node("WandSprite")
 
 # =============================================================================
 # MAIN UPDATE
@@ -72,6 +83,7 @@ func update_effects(delta: float):
 	"""Update all effects - called from player's _physics_process."""
 	_update_timers(delta)
 	_handle_screen_shake(delta)
+	_handle_wand_visibility(delta)
 
 func _update_timers(delta: float):
 	"""Update all effect timers."""
@@ -88,6 +100,12 @@ func _update_timers(delta: float):
 			is_invincible = false
 			is_flickering = false
 			sprite.modulate.a = 1.0
+	
+	if is_wand_visible:
+		wand_visibility_timer -= delta
+		if wand_visibility_timer <= 0:
+			is_wand_visible = false
+			wand_sprite.visible = false
 
 func _handle_screen_shake(_delta: float):
 	"""Handle screen shake effect by offsetting the viewport."""
@@ -109,6 +127,11 @@ func _handle_invincibility_flicker(delta: float):
 				sprite.modulate.a = 0.1
 			else:
 				sprite.modulate.a = 1.0
+
+func _handle_wand_visibility(_delta: float):
+	"""Handle wand sprite visibility - ensures it's visible when timer is active."""
+	if is_wand_visible:
+		wand_sprite.visible = true
 
 # =============================================================================
 # DAMAGE SYSTEM
@@ -158,6 +181,17 @@ func _start_screen_shake():
 func _reset_camera_position():
 	"""Reset the camera to its original position after screen shake."""
 	player.get_viewport().canvas_transform.origin = original_camera_position
+
+# =============================================================================
+# WAND SPRITE SYSTEM
+# =============================================================================
+
+func on_player_shoot():
+	"""Handle player shooting event - shows wand sprite with debounce logic."""
+	# Reset timer to full duration (debounce behavior)
+	is_wand_visible = true
+	wand_visibility_timer = wand_visibility_duration
+	wand_sprite.visible = true
 
 # =============================================================================
 # STATE QUERIES
