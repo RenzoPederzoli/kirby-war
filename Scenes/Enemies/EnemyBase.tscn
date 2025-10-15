@@ -1,18 +1,137 @@
-[gd_scene load_steps=7 format=3 uid="uid://d25v66o1mgo2h"]
+[gd_scene load_steps=11 format=3 uid="uid://d25v66o1mgo2h"]
 
 [ext_resource type="Script" uid="uid://cw80t024lr7ry" path="res://Scenes/Enemies/Scripts/enemy_base.gd" id="1_p6c21"]
-[ext_resource type="Texture2D" uid="uid://cdi20j3ov288k" path="res://Scenes/Enemies/Assets/base_enemy.png" id="2_srcxp"]
-[ext_resource type="Texture2D" uid="uid://doe0qnjgjjtju" path="res://Scenes/Enemies/Assets/Shatter_projectile_hitmarker.png" id="3_srcxp"]
+[ext_resource type="Texture2D" uid="uid://dedmtxl4yg2i" path="res://Scenes/Enemies/Animations/Shatter_projectile_explosion-Sheet.png" id="4_2a3kf"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_p6c21"]
 friction = 0.0
 bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pu86i"]
-radius = 9.05539
+radius = 8.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p6c21"]
-radius = 10.0499
+radius = 9.0
+
+[sub_resource type="Animation" id="Animation_srcxp"]
+resource_name = "death"
+length = 0.85
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_2a3kf")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.85),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 32, 32), Rect2(32, 0, 32, 32), Rect2(64, 0, 32, 32), Rect2(96, 0, 32, 32), Rect2(128, 0, 32, 32), Rect2(160, 0, 32, 32), Rect2(192, 0, 32, 32), Rect2(224, 0, 32, 32), Rect2(256, 0, 32, 32), Rect2(288, 0, 32, 32)]
+}
+
+[sub_resource type="Animation" id="Animation_2a3kf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_2a3kf")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 32, 32)]
+}
+
+[sub_resource type="Animation" id="Animation_m1s7c"]
+resource_name = "idle"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_2a3kf")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 32, 32)]
+}
+
+[sub_resource type="Animation" id="Animation_aahyb"]
+resource_name = "take_damage"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_2a3kf")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Rect2(32, 0, 32, 32)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m1s7c"]
+_data = {
+&"RESET": SubResource("Animation_2a3kf"),
+&"death": SubResource("Animation_srcxp"),
+&"idle": SubResource("Animation_m1s7c"),
+&"take_damage": SubResource("Animation_aahyb")
+}
 
 [node name="EnemyBase" type="RigidBody2D"]
 collision_layer = 2
@@ -28,14 +147,16 @@ shape = SubResource("CircleShape2D_pu86i")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.507017, 0.507017)
-texture = ExtResource("2_srcxp")
+texture = ExtResource("4_2a3kf")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
 
 [node name="TouchDamage" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TouchDamage"]
 shape = SubResource("CircleShape2D_p6c21")
 
-[node name="HitmarkerSprite" type="Sprite2D" parent="."]
-visible = false
-scale = Vector2(0.52, 0.52)
-texture = ExtResource("3_srcxp")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_m1s7c")
+}

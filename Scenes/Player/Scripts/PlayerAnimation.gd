@@ -28,6 +28,10 @@ func _init(player_node: CharacterBody2D):
 
 func update_animation(movement_system):
 	"""Update player animations based on current state."""
+	# Don't update animations if player is dead
+	if player.is_dead:
+		return
+		
 	if not animation_player.is_playing() or animation_player.current_animation != "take_damage":
 		if not player.is_on_floor():
 			if player.velocity.y < 0:
@@ -64,3 +68,7 @@ func play_damage_animation():
 func get_damage_animation_duration() -> float:
 	"""Get the duration of the damage animation."""
 	return animation_player.get_animation("take_damage").length
+
+func play_death_animation():
+	"""Play the death animation."""
+	animation_player.play("death")

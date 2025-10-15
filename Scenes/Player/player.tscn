@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dnvl5s8x0rc60"]
+[gd_scene load_steps=21 format=3 uid="uid://dnvl5s8x0rc60"]
 
 [ext_resource type="Script" uid="uid://b0bppoxoc5usm" path="res://Scenes/Player/Scripts/player.gd" id="1_a3d8c"]
 [ext_resource type="Texture2D" uid="uid://c2focjmk5efg4" path="res://Scenes/Player/Animations/Frostblade_Idle_Animation-Sheet.png" id="3_mtuoh"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dverusom11mt8" path="res://Scenes/Player/Animations/Frostblade_Brake_Animation-Sheet.png" id="5_htcer"]
 [ext_resource type="Texture2D" uid="uid://cfwhhjmp8p35p" path="res://Scenes/Player/Animations/Frostblade_Rise_Frame.png" id="6_dd0ac"]
 [ext_resource type="Texture2D" uid="uid://ckn0evkej6fuq" path="res://Scenes/Player/Animations/Frostblade_Fall_Frame.png" id="7_0u5uq"]
+[ext_resource type="Texture2D" uid="uid://xt4ksnh7n08a" path="res://Scenes/Player/Animations/Frostblade_Death_Animation-Sheet.png" id="8_gk6dx"]
 [ext_resource type="Texture2D" uid="uid://l4wcvi6yq271" path="res://Scenes/Player/Assets/Wand.png" id="8_jlvik"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xpcdj"]
@@ -238,10 +239,38 @@ tracks/1/keys = {
 "values": [Rect2(0, 0, 32, 32), Rect2(32, 0, 32, 32), Rect2(64, 0, 32, 32), Rect2(96, 0, 32, 32), Rect2(128, 0, 32, 32), Rect2(160, 0, 32, 32), Rect2(192, 0, 32, 32), Rect2(224, 0, 32, 32)]
 }
 
+[sub_resource type="Animation" id="Animation_jhyir"]
+resource_name = "death"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_gk6dx")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667, 0.4, 0.533333, 0.666667, 0.8, 0.933333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 32, 32), Rect2(32, 0, 32, 32), Rect2(64, 0, 32, 32), Rect2(96, 0, 32, 32), Rect2(128, 0, 32, 32), Rect2(160, 0, 32, 32), Rect2(192, 0, 32, 32), Rect2(224, 0, 32, 32)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_htcer"]
 _data = {
 &"RESET": SubResource("Animation_mtuoh"),
 &"brake": SubResource("Animation_0u5uq"),
+&"death": SubResource("Animation_jhyir"),
 &"fall": SubResource("Animation_gk6dx"),
 &"idle": SubResource("Animation_a3d8c"),
 &"move": SubResource("Animation_xpcdj"),

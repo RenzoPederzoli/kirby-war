@@ -15,6 +15,10 @@ run/main_scene="uid://buh06gdv7ep1h"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+LootTable="*res://Scenes/Player/Scripts/LootTable.gd"
+
 [display]
 
 window/size/viewport_width=320
@@ -60,10 +64,6 @@ brake={
 [physics]
 
 2d/default_gravity=660.0
-
-[autoload]
-
-LootTable="*res://Scenes/Player/Scripts/LootTable.gd"
 
 [rendering]
 

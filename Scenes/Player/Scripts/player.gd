@@ -10,6 +10,9 @@ extends CharacterBody2D
 ## Emitted when the player shoots
 signal player_shot
 
+## Emitted when the player dies
+signal player_died
+
 # =============================================================================
 # EXPORTED VARIABLES (Delegated to Systems)
 # =============================================================================
@@ -31,6 +34,10 @@ signal player_shot
 @export var screen_shake_intensity: float = 0.5
 @export var screen_shake_duration: float = 0.4
 
+# Health System Exports
+@export_group("Health")
+@export var max_health: int = 3
+
 # Leveling System Exports
 @export_group("Leveling")
 @export var base_exp_required: int = 50
@@ -47,6 +54,10 @@ var effects_system
 var leveling_system
 var loot_system
 
+# Health System
+var current_health: int
+var is_dead: bool = false
+
 # =============================================================================
 # GODOT LIFECYCLE
 # =============================================================================
@@ -55,6 +66,9 @@ func _ready():
 	"""Initialize the player character and all system components."""
 	# Add player to group for easy access by enemies
 	add_to_group("player")
+	
+	# Initialize health
+	current_health = max_health
 	
 	# Initialize all systems
 	movement_system = preload("res://Scenes/Player/Scripts/PlayerMovement.gd").new(self)
@@ -69,6 +83,7 @@ func _ready():
 	
 	# Connect signals
 	player_shot.connect(_on_player_shot)
+	player_died.connect(_on_player_died)
 	
 	# Start with idle animation
 	animation_system.update_animation(movement_system)
@@ -99,6 +114,10 @@ func _configure_systems():
 
 func _physics_process(delta: float):
 	"""Main physics update loop - delegates to system components."""
+	# Don't update systems if player is dead
+	if is_dead:
+		return
+	
 	# Update all systems
 	movement_system.update_movement(delta)
 	combat_system.update_combat()
@@ -157,6 +176,23 @@ func get_active_items() -> Array:
 func has_item(item_name: String) -> bool:
 	"""Check if the player has a specific item."""
 	return loot_system.has_item(item_name)
+
+func get_current_health() -> int:
+	"""Get the current health."""
+	return current_health
+
+func get_max_health() -> int:
+	"""Get the maximum health."""
+	return max_health
+
+func is_player_dead() -> bool:
+	"""Check if the player is dead."""
+	return is_dead
+
+func _on_player_died():
+	"""Signal handler for player death - can be overridden by external systems."""
+	print("Player died -- player.gd")
+	pass
 
 # =============================================================================
 # SIGNAL HANDLERS

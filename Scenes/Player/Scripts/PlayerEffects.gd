@@ -139,8 +139,20 @@ func _handle_wand_visibility(_delta: float):
 
 func apply_enemy_contact(enemy: Node2D, damage: int, animation_system):
 	"""Handle damage from enemy contact with invincibility frames, knockback, and screen shake."""
-	if not is_invincible:
+	if not is_invincible and not player.is_dead:
 		print("Player hit by enemy: ", enemy.name, " with damage: ", damage)
+		
+		# Apply damage to health
+		player.current_health -= damage
+		print("Player health: ", player.current_health, "/", player.max_health)
+		
+		# Check if player died
+		if player.current_health <= 0:
+			player.current_health = 0
+			player.is_dead = true
+			player.player_died.emit()
+			animation_system.play_death_animation()
+			return
 		
 		# Apply knockback
 		_apply_knockback(enemy)
