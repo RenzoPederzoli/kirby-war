@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=2 format=3 uid="uid://bmfb154mccb4c"]
+
+[ext_resource type="Script" uid="uid://tcoxhg84u84f" path="res://Scenes/Player/Scripts/LootItem.gd" id="1_nmgem"]
+
+[resource]
+script = ExtResource("1_nmgem")
+item_name = "Fire Rate Up"
+description = "Increase shooting speed by 20%"
+item_type = "stat_upgrade"
+stackable = true
+weight = 2.0
+effect_data = {}

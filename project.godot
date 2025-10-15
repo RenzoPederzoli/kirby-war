@@ -61,6 +61,10 @@ brake={
 
 2d/default_gravity=660.0
 
+[autoload]
+
+LootTable="*res://Scenes/Player/Scripts/LootTable.gd"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

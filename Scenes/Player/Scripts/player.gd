@@ -45,6 +45,7 @@ var combat_system
 var animation_system
 var effects_system
 var leveling_system
+var loot_system
 
 # =============================================================================
 # GODOT LIFECYCLE
@@ -61,6 +62,7 @@ func _ready():
 	animation_system = preload("res://Scenes/Player/Scripts/PlayerAnimation.gd").new(self)
 	effects_system = preload("res://Scenes/Player/Scripts/PlayerEffects.gd").new(self)
 	leveling_system = preload("res://Scenes/Player/Scripts/PlayerLeveling.gd").new(self)
+	loot_system = preload("res://Scenes/Player/Scripts/PlayerLoot.gd").new(self)
 	
 	# Pass exported values to systems
 	_configure_systems()
@@ -91,6 +93,9 @@ func _configure_systems():
 	leveling_system.base_exp_required = base_exp_required
 	leveling_system.exp_multiplier = exp_multiplier
 	leveling_system.initialize()
+	
+	# Configure loot system
+	loot_system.initialize()
 
 func _physics_process(delta: float):
 	"""Main physics update loop - delegates to system components."""
@@ -144,6 +149,14 @@ func get_experience() -> int:
 func get_exp_to_next_level() -> int:
 	"""Get experience required for the next level."""
 	return leveling_system.get_exp_to_next_level()
+
+func get_active_items() -> Array:
+	"""Get the player's currently active items."""
+	return loot_system.get_active_items()
+
+func has_item(item_name: String) -> bool:
+	"""Check if the player has a specific item."""
+	return loot_system.has_item(item_name)
 
 # =============================================================================
 # SIGNAL HANDLERS
