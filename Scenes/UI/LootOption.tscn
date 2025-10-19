@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://b24hmjnj75r0u"]
+
+[ext_resource type="Script" uid="uid://c0mt8lw70vutl" path="res://Scenes/ui/LootOptionContainer.gd" id="1_1ojek"]
+[ext_resource type="FontFile" uid="uid://b503swge4hnw1" path="res://Scenes/Generics/Assets/PixelatedEleganceRegular-ovyAA.ttf" id="2_6qsyj"]
+
+[node name="MarginContainer" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1ojek")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6qsyj")
+theme_override_font_sizes/font_size = 3
+text = "Test"
+
+[node name="Stats" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6qsyj")
+theme_override_font_sizes/font_size = 3
+text = "Test stats"

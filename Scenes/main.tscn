@@ -8,7 +8,7 @@
 [ext_resource type="FontFile" uid="uid://crlxvfswysy4v" path="res://Scenes/Generics/Assets/Belleza-Regular.ttf" id="6_6bp64"]
 [ext_resource type="Script" uid="uid://cmfoqiicfj2us" path="res://Scenes/mute_button.gd" id="6_21xkr"]
 [ext_resource type="Script" uid="uid://cts37mm4r7th1" path="res://Scenes/Scripts/background_scaling.gd" id="7_scaling"]
-[ext_resource type="PackedScene" uid="uid://biaa5kwwx28k3" path="res://Scenes/UI/XPBar.tscn" id="8_xpbar"]
+[ext_resource type="PackedScene" uid="uid://biaa5kwwx28k3" path="res://Scenes/ui/XPBar.tscn" id="8_xpbar"]
 
 [node name="SceneRoot" type="Node2D"]
 script = ExtResource("1_8gbba")

@@ -3,7 +3,7 @@ extends Node2D
 @onready var enemy_spawn_point: Marker2D = $EnemySpawnDebug
 @onready var background_track: AudioStreamPlayer = $BackgroundTrack
 @onready var player: CharacterBody2D = $Player
-@onready var xp_bar: XPBar = $CanvasLayer/XPBar
+@onready var xp_bar: Control = $CanvasLayer/XPBar
 
 var enemy_scene: PackedScene
 
