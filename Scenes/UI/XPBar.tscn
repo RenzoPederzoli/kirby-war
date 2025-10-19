@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://biaa5kwwx28k3"]
 
-[ext_resource type="Script" uid="uid://cuvvyp4hqgai3" path="res://Scenes/UI/Scripts/XPBar.gd" id="1_xpbar"]
+[ext_resource type="Script" uid="uid://cuvvyp4hqgai3" path="res://Scenes/ui/XPBar.gd" id="1_xpbar"]
 [ext_resource type="FontFile" uid="uid://b503swge4hnw1" path="res://Scenes/Generics/Assets/PixelatedEleganceRegular-ovyAA.ttf" id="2_85gt8"]
 
 [node name="XPBar" type="Control"]

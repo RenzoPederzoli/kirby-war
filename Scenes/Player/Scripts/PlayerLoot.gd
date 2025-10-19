@@ -58,12 +58,16 @@ func _on_level_up(new_level: int):
 	
 	# Generate three loot choices
 	var loot_choices = LootTable.generate_loot_choices(3)
-	
-	# Print loot choices to console with formatting
-	_print_loot_choices(loot_choices)
-	
+
 	# Emit signal for potential UI systems
 	loot_choices_generated.emit(loot_choices)
+
+	# Print loot choices to console with formatting
+	_print_loot_choices(loot_choices)
+
+	var picked = await UI.show_loot_choices(loot_choices)
+	
+	print("Picked: ", picked.item_name)
 
 func _print_loot_choices(choices: Array):
 	"""

@@ -1,5 +1,5 @@
 extends Control
-class_name XPBar
+class_name PlayerXPBar
 
 ## UI component for displaying player level and experience progress.
 ## Shows current level and XP text.
