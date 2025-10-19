@@ -1,0 +1,210 @@
+[gd_scene load_steps=12 format=3 uid="uid://b8x7lam2n4p5q"]
+
+[ext_resource type="Script" path="res://Scenes/GameOver.gd" id="1_gameover"]
+[ext_resource type="Texture2D" uid="uid://dmug8mavjob1s" path="res://Scenes/Generics/Assets/Shattered_Moon_MAP_2.0.png" id="2_background"]
+[ext_resource type="FontFile" uid="uid://b503swge4hnw1" path="res://Scenes/Generics/Assets/PixelatedEleganceRegular-ovyAA.ttf" id="3_pixel_font"]
+[ext_resource type="FontFile" uid="uid://crlxvfswysy4v" path="res://Scenes/Generics/Assets/Belleza-Regular.ttf" id="4_belleza_font"]
+[ext_resource type="AudioStream" uid="uid://dui88d7lvidba" path="res://Scenes/Generics/Assets/Frostblade_Main_OST.mp3" id="5_music"]
+[ext_resource type="Script" uid="uid://cts37mm4r7th1" path="res://Scenes/Scripts/background_scaling.gd" id="6_scaling"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_play_again"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_play_again_hover"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_play_again_pressed"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quit"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quit_hover"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quit_pressed"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[node name="GameOver" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_gameover")
+
+[node name="Background" type="Sprite2D" parent="."]
+z_index = -10
+texture_filter = 1
+texture_repeat = 1
+texture = ExtResource("2_background")
+script = ExtResource("6_scaling")
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_music")
+volume_db = -10.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BackgroundPanel" type="ColorRect" parent="CanvasLayer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -100.0
+offset_right = 140.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -80.0
+offset_right = 120.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOverTitle" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_pixel_font")
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="StatsContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="FinalLevelLabel" type="Label" parent="CanvasLayer/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_pixel_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+text = "Final Level: 1"
+horizontal_alignment = 1
+
+[node name="EnemiesDefeatedLabel" type="Label" parent="CanvasLayer/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_pixel_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+text = "Enemies Defeated: 0"
+horizontal_alignment = 1
+
+[node name="TimeSurvivedLabel" type="Label" parent="CanvasLayer/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_pixel_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+text = "Time Survived: 0:00"
+horizontal_alignment = 1
+
+[node name="ItemsCollectedLabel" type="Label" parent="CanvasLayer/VBoxContainer/StatsContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_pixel_font")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+text = "Items Collected: 0"
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="PlayAgainButton" type="Button" parent="CanvasLayer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_pixel_font")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.8, 1, 0.8, 1)
+theme_override_colors/font_pressed_color = Color(0.6, 0.8, 0.6, 1)
+theme_override_colors/font_focus_color = Color(0.8, 1, 0.8, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_play_again")
+theme_override_styles/hover = SubResource("StyleBoxFlat_play_again_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_play_again_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_play_again_hover")
+text = "PLAY AGAIN"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_pixel_font")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.8, 0.8, 1)
+theme_override_colors/font_pressed_color = Color(0.8, 0.6, 0.6, 1)
+theme_override_colors/font_focus_color = Color(1, 0.8, 0.8, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_quit")
+theme_override_styles/hover = SubResource("StyleBoxFlat_quit_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_quit_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_quit_hover")
+text = "QUIT"
