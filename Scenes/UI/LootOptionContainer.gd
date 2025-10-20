@@ -69,10 +69,31 @@ func set_choice(choice_data) -> void:
 	_choice_data = choice_data
 	_name.text = str(choice_data.item_name)
 	_stats.text = str(choice_data.description)
-	if "icon" in choice_data and choice_data.icon != null:
-		_icon.texture = choice_data.icon
+	
+	# Set sprite if available
+	if choice_data.sprite != null:
+		_icon.texture = choice_data.sprite
+		_icon.visible = true
 	else:
 		_icon.visible = false
+	
+	# Apply rarity-based coloring
+	_apply_rarity_coloring(choice_data.rarity)
+
+func _apply_rarity_coloring(rarity: int) -> void:
+	"""Apply color coding based on item rarity (0-4)."""
+	var rarity_colors = [
+		Color.WHITE,      # 0 - Common (white)
+		Color.GREEN,      # 1 - Uncommon (green)
+		Color.BLUE,       # 2 - Rare (blue)
+		Color.PURPLE,     # 3 - Epic (purple)
+		Color.ORANGE      # 4 - Legendary (orange)
+	]
+	
+	if rarity >= 0 and rarity < rarity_colors.size():
+		modulate = rarity_colors[rarity]
+	else:
+		modulate = Color.WHITE  # Default to white if rarity is out of range
 
 func grab_primary_focus() -> void:
 	grab_focus()

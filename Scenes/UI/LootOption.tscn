@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://b24hmjnj75r0u"]
+[gd_scene load_steps=4 format=3 uid="uid://b24hmjnj75r0u"]
 
 [ext_resource type="Script" uid="uid://c0mt8lw70vutl" path="res://Scenes/ui/LootOptionContainer.gd" id="1_1ojek"]
+[ext_resource type="Texture2D" uid="uid://7q5ak74rqkp0" path="res://icon.svg" id="2_1ojek"]
 [ext_resource type="FontFile" uid="uid://b503swge4hnw1" path="res://Scenes/Generics/Assets/PixelatedEleganceRegular-ovyAA.ttf" id="2_6qsyj"]
 
 [node name="MarginContainer" type="MarginContainer"]
@@ -19,6 +20,8 @@ layout_mode = 2
 
 [node name="Icon" type="TextureRect" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+texture = ExtResource("2_1ojek")
+expand_mode = 4
 
 [node name="Name" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2

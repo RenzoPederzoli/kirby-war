@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="LootItem" load_steps=2 format=3 uid="uid://bmfb154mccb4c"]
+[gd_resource type="Resource" script_class="LootItem" load_steps=3 format=3 uid="uid://bmfb154mccb4c"]
 
 [ext_resource type="Script" uid="uid://tcoxhg84u84f" path="res://Scenes/Player/Scripts/LootItem.gd" id="1_nmgem"]
+[ext_resource type="Texture2D" uid="uid://7q5ak74rqkp0" path="res://icon.svg" id="2_pa0wg"]
 
 [resource]
 script = ExtResource("1_nmgem")
@@ -9,6 +10,8 @@ description = "Increase shooting speed by 20%"
 item_type = "stat_upgrade"
 stackable = true
 weight = 2.0
+rarity = 1
+sprite = ExtResource("2_pa0wg")
 effect_data = {
 "effect_type": "additive",
 "modifier": -0.04,
