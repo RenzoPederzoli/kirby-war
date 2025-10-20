@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=2 format=3 uid="uid://do2itftlpu4f6"]
+
+[ext_resource type="Script" uid="uid://tcoxhg84u84f" path="res://Scenes/Player/Scripts/LootItem.gd" id="1_health"]
+
+[resource]
+script = ExtResource("1_health")
+item_name = "Heart Container"
+description = "Increase maximum health by 1"
+item_type = "stat_upgrade"
+stackable = true
+weight = 1.2
+effect_data = {
+"effect_type": "additive",
+"modifier": 1.0,
+"stat": "max_health"
+}

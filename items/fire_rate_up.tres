@@ -9,4 +9,8 @@ description = "Increase shooting speed by 20%"
 item_type = "stat_upgrade"
 stackable = true
 weight = 2.0
-effect_data = {}
+effect_data = {
+"effect_type": "additive",
+"modifier": -0.04,
+"stat": "fire_rate"
+}

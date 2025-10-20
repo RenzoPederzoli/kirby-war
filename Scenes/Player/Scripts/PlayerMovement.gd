@@ -123,7 +123,11 @@ func _handle_movement_input(delta: float):
 func _handle_momentum_movement(direction: float, delta: float):
 	"""Handle momentum-based horizontal movement with acceleration and deceleration."""
 	if direction != 0:
-		var target_velocity = direction * terminal_velocity
+		# Get movement speed multiplier from stats system
+		var move_speed_multiplier = player.get_move_speed()
+		
+		# Apply movement speed multiplier to terminal velocity
+		var target_velocity = direction * terminal_velocity * move_speed_multiplier
 		var current_acceleration = acceleration
 		
 		# Apply enhanced acceleration after braking

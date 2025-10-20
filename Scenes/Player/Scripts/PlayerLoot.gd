@@ -68,6 +68,13 @@ func _on_level_up(new_level: int):
 	var picked = await UI.show_loot_choices(loot_choices)
 	
 	print("Picked: ", picked.item_name)
+	
+	# TODO: Implement different rarity levels
+	# Apply the item effect to the player's stats
+	player.stats_system.apply_item_effect(picked)
+	
+	# Add the item to the player's collection
+	add_item(picked)
 
 func _print_loot_choices(choices: Array):
 	"""

@@ -24,19 +24,11 @@ signal player_died
 @export var post_brake_acceleration: float = 400.0
 @export var jump_velocity: float = -275.0
 
-# Combat System Exports
-@export_group("Combat")
-@export var fire_rate: float = 0.2
-
 # Effects System Exports
 @export_group("Effects")
 @export var knockback_force: float = 150.0
 @export var screen_shake_intensity: float = 0.5
 @export var screen_shake_duration: float = 0.4
-
-# Health System Exports
-@export_group("Health")
-@export var max_health: int = 3
 
 # Leveling System Exports
 @export_group("Leveling")
@@ -53,6 +45,7 @@ var animation_system
 var effects_system
 var leveling_system
 var loot_system
+var stats_system
 
 # Health System
 var current_health: int
@@ -67,10 +60,10 @@ func _ready():
 	# Add player to group for easy access by enemies
 	add_to_group("player")
 	
-	# Initialize health
-	current_health = max_health
+	
 	
 	# Initialize all systems
+	stats_system = preload("res://Scenes/Player/Scripts/PlayerStats.gd").new(self)
 	movement_system = preload("res://Scenes/Player/Scripts/PlayerMovement.gd").new(self)
 	combat_system = preload("res://Scenes/Player/Scripts/PlayerCombat.gd").new(self)
 	animation_system = preload("res://Scenes/Player/Scripts/PlayerAnimation.gd").new(self)
@@ -81,12 +74,18 @@ func _ready():
 	# Pass exported values to systems
 	_configure_systems()
 	
+	# Initialize health
+	current_health = get_max_health()
+
 	# Connect signals
 	player_shot.connect(_on_player_shot)
 	player_died.connect(_on_player_died)
 	
 	# Start with idle animation
 	animation_system.update_animation(movement_system)
+	
+	# Debug: Print initial stats
+	stats_system.print_all_stats()
 
 func _configure_systems():
 	"""Configure all systems with exported values."""
@@ -95,9 +94,6 @@ func _configure_systems():
 	movement_system.brake_momentum_preservation = brake_momentum_preservation
 	movement_system.post_brake_acceleration = post_brake_acceleration
 	movement_system.jump_velocity = jump_velocity
-	
-	# Configure combat system
-	combat_system.fire_rate = fire_rate
 	
 	# Configure effects system
 	effects_system.knockback_force = knockback_force
@@ -182,12 +178,28 @@ func get_current_health() -> int:
 	return current_health
 
 func get_max_health() -> int:
-	"""Get the maximum health."""
-	return max_health
+	"""Get the current maximum health from the stats system."""
+	return int(stats_system.get_stat_value(PlayerStats.StatType.MAX_HEALTH))
 
 func is_player_dead() -> bool:
 	"""Check if the player is dead."""
 	return is_dead
+
+# =============================================================================
+# STATS SYSTEM ACCESS
+# =============================================================================
+
+func get_fire_rate() -> float:
+	"""Get the current fire rate from the stats system."""
+	return stats_system.get_stat_value(PlayerStats.StatType.FIRE_RATE)
+
+func get_attack() -> float:
+	"""Get the current attack value from the stats system."""
+	return stats_system.get_stat_value(PlayerStats.StatType.ATTACK)
+
+func get_move_speed() -> float:
+	"""Get the current movement speed multiplier from the stats system."""
+	return stats_system.get_stat_value(PlayerStats.StatType.MOVE_SPEED)
 
 func _on_player_died():
 	"""Signal handler for player death - can be overridden by external systems."""

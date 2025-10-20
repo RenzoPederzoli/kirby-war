@@ -11,9 +11,6 @@ class_name PlayerCombat
 ## Scene to instantiate when shooting
 @export var pellet_scene: PackedScene
 
-## Time in seconds between consecutive shots
-var fire_rate: float = 0.2
-
 # =============================================================================
 # RUNTIME STATE
 # =============================================================================
@@ -63,5 +60,7 @@ func shoot():
 		player.player_shot.emit()
 		
 		can_shoot = false
-		await player.get_tree().create_timer(fire_rate).timeout
+		# Use fire rate from stats system
+		var current_fire_rate = player.get_fire_rate()
+		await player.get_tree().create_timer(current_fire_rate).timeout
 		can_shoot = true

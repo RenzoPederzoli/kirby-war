@@ -82,6 +82,7 @@ func _on_player_died():
 	GameStats.time_survived = time_survived
 	GameStats.items_collected = items_collected
 	
+	# TODO: Let death animation play before transitioning to game over scene
 	# Use call_deferred to avoid physics callback issues
 	call_deferred("_transition_to_game_over")
 

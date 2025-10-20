@@ -1,9 +1,10 @@
 extends Area2D
 
 @export var speed: float = 300.0
-@export var damage: int = 10
+@export var base_damage: int = 10  # Base damage, will be modified by player attack stat
 
 var velocity: Vector2
+var damage: int  # Final damage after player attack stat modification
 
 func _ready() -> void:
     body_entered.connect(_on_body_entered)
@@ -19,6 +20,13 @@ func _physics_process(delta: float) -> void:
 
 func fire(direction: Vector2) -> void:
     velocity = direction.normalized() * speed
+    
+    # Calculate final damage using player's attack stat
+    var player = get_tree().get_first_node_in_group("player")
+    if player and player.has_method("get_attack"):
+        damage = base_damage * player.get_attack()
+    else:
+        damage = base_damage
 
 func _on_body_entered(body: Node) -> void:
     if body.has_method("apply_pellet_hit"):
