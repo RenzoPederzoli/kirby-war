@@ -63,37 +63,6 @@ func generate_loot_choices(count: int, player_level: int = 1) -> Array:
 	
 	return choices
 
-func _weighted_random_select(items: Array):
-	"""
-	Select a random item from the array using weighted selection.
-	
-	Args:
-		items: Array of LootItem resources
-		
-	Returns:
-		Randomly selected LootItem based on weights
-	"""
-	if items.is_empty():
-		return null
-	
-	# Calculate total weight
-	var total_weight: float = 0.0
-	for item in items:
-		total_weight += item.weight
-	
-	# Generate random number
-	var random_value = randf() * total_weight
-
-    # Find the selected item
-	var current_weight: float = 0.0
-	for item in items:
-		current_weight += item.weight
-		if random_value <= current_weight:
-			return item
-	
-	# Fallback (should never reach here)
-	return items[0]
-
 func _weighted_random_select_items(weighted_items: Array):
 	"""
 	Select a random item from a weighted array structure.
@@ -129,9 +98,9 @@ func _calculate_level_aware_weight(item: LootItem, player_level: int) -> float:
 	"""
 	Calculate effective weight for an item based on its rarity and player level.
 	
-	As player levels up:
-	- Common items (rarity 0-1) become LESS common
-	- Rare items (rarity 2-4) become MORE common
+	The weight determines how likely an item is to be selected during loot generation.
+	Rarity scaling makes higher-tier items exponentially rarer, while level scaling
+	allows rare items to become more common as the player progresses.
 	
 	Args:
 		item: The LootItem to calculate weight for
@@ -143,17 +112,30 @@ func _calculate_level_aware_weight(item: LootItem, player_level: int) -> float:
 	var base_weight = item.weight
 	var rarity = item.rarity
 	
-	# Rarity scaling: each tier is half as likely as the previous
-	var rarity_scaling = pow(0.5, rarity)
+	# Rarity scaling: each tier is 4x rarer than the previous
+	# Common=1.0, Uncommon=0.25, Rare=0.0625, Epic=0.0156, Legendary=0.0039
+	var rarity_scaling = pow(0.25, rarity)
 	
-	# Level scaling: higher rarities benefit more from level progression
-	# Formula: (1 + (level-1) * 0.15) ^ (rarity - 2)
-	# This makes rarity 0-1 get penalized at higher levels
-	# And rarity 2-4 get boosted at higher levels
-	var level_factor = 1.0 + (player_level - 1) * 0.15
-	var level_scaling = pow(level_factor, rarity - 2)
+	# Level scaling: adjusts weights based on player progression
+	# Factor increases by 5% per level, creating a gradual progression curve
+	var level_factor = 1.0 + (player_level - 1) * 0.05
+	
+	# Apply level-based adjustments differently by rarity tier
+	# Lower rarities get penalties at higher levels, higher rarities get bonuses
+	var level_scaling = 1.0
+	if rarity <= 1:
+		# Common/Uncommon items become less likely as player levels up
+		level_scaling = pow(1.0 / level_factor, 0.3)
+	elif rarity >= 3:
+		# Epic/Legendary items become more likely as player levels up
+		level_scaling = pow(level_factor, (rarity - 2) * 0.6)
 	
 	var effective_weight = base_weight * rarity_scaling * level_scaling
+	
+	# Epic/Legendary items have zero weight below level 3
+	# This ensures these powerful items only appear after some progression
+	if rarity >= 3 and player_level < 3:
+		effective_weight = 0.0
 	
 	return effective_weight
 
