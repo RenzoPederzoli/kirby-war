@@ -67,6 +67,11 @@ func _ready():
 	# Add player to group for easy access by enemies
 	add_to_group("player")
 	
+	# Set player collision layers
+	# Layer 2 for player - enemies bounce off player but player doesn't get pushed
+	collision_layer = 2
+	collision_mask = 1  # Only collide with world (1), NOT enemies (4) - so player ignores enemy physics
+	
 	# Initialize health
 	current_health = max_health
 	

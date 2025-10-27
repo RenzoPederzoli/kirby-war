@@ -87,7 +87,9 @@ func _setup_ground_raycast():
 	"""Configure the ground detection raycast."""
 	ground_raycast.target_position = Vector2(0, 15)
 	ground_raycast.enabled = true
-	ground_raycast.collision_mask = 1
+	# Detect layer 1 (ground) and layer 4 (enemies for jumping on head)
+	# Raycast is separate from player collision, so it can detect enemies
+	ground_raycast.collision_mask = 1 + 4  # Layers 1 and 4
 
 # =============================================================================
 # MAIN UPDATE
@@ -183,6 +185,7 @@ func check_jump_reset():
 	"""Reset jump ability when player touches the ground."""
 	if ground_raycast.is_colliding() and jump_reset_timer <= 0:
 		can_jump = true
+		_check_enemy_jump_damage()
 
 # =============================================================================
 # BRAKING SYSTEM
@@ -204,3 +207,15 @@ func reset_brake_animation_flag():
 	"""Reset the brake animation flag when not braking."""
 	if not is_braking:
 		brake_animation_played = false
+
+# =============================================================================
+# ENEMY JUMP DAMAGE SYSTEM
+# =============================================================================
+
+func _check_enemy_jump_damage():
+	"""Check if player landed on an enemy and apply jump damage."""
+	var collider = ground_raycast.get_collider()
+	if collider and collider.has_method("apply_jump_damage"):
+		# Player landed on an enemy - apply jump damage
+		collider.apply_jump_damage()
+		print("Player jumped on enemy: ", collider.name)

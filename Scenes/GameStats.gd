@@ -29,3 +29,4 @@ func reset_stats():
 	enemies_defeated = 0
 	time_survived = 0.0
 	items_collected = 0
+

@@ -6,6 +6,8 @@ extends Area2D
 var velocity: Vector2
 
 func _ready() -> void:
+    # Set collision mask to detect enemies on layer 4
+    collision_mask = 4
     body_entered.connect(_on_body_entered)
 
 func _physics_process(delta: float) -> void:
