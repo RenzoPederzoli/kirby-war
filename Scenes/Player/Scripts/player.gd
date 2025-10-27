@@ -80,6 +80,7 @@ func _ready():
 	# Connect signals
 	player_shot.connect(_on_player_shot)
 	player_died.connect(_on_player_died)
+	stats_system.stat_changed.connect(_on_stat_changed)
 	
 	# Start with idle animation
 	animation_system.update_animation(movement_system)
@@ -213,3 +214,21 @@ func _on_player_died():
 func _on_player_shot():
 	"""Handle player shot signal - notify effects system."""
 	effects_system.on_player_shoot()
+
+func _on_stat_changed(stat_type: PlayerStats.StatType, old_value: float, new_value: float):
+	"""
+	Handle stat changes from the stats system.
+	
+	Args:
+		stat_type: The type of stat that changed
+		old_value: The previous value
+		new_value: The new value
+	"""
+	# When max_health increases, add the health increase to current health
+	if stat_type == PlayerStats.StatType.MAX_HEALTH:
+		var health_increase = int(new_value) - int(old_value)
+		if health_increase > 0:
+			current_health += health_increase
+			# Ensure current health doesn't exceed max health
+			current_health = min(current_health, int(new_value))
+			print("Health increased! Current: ", current_health, " / Max: ", int(new_value))
