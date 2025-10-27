@@ -56,8 +56,8 @@ func _on_level_up(new_level: int):
 	print("\n=== LEVEL UP! ===")
 	print("Player reached level ", new_level)
 	
-	# Generate three loot choices
-	var loot_choices = LootTable.generate_loot_choices(3)
+	# Generate three loot choices with level-aware rarity scaling
+	var loot_choices = LootTable.generate_loot_choices(3, new_level)
 
 	# Emit signal for potential UI systems
 	loot_choices_generated.emit(loot_choices)
@@ -67,9 +67,8 @@ func _on_level_up(new_level: int):
 
 	var picked = await UI.show_loot_choices(loot_choices)
 	
-	print("Picked: ", picked.item_name)
+	print("Picked: ", picked.item_name, " (Rarity ", picked.rarity, ")")
 	
-	# TODO: Implement different rarity levels
 	# Apply the item effect to the player's stats
 	player.stats_system.apply_item_effect(picked)
 	
@@ -85,12 +84,15 @@ func _print_loot_choices(choices: Array):
 	"""
 	print("\n🎁 LOOT CHOICES:")
 	
+	var rarity_names = ["Common", "Uncommon", "Rare", "Epic", "Legendary"]
+	
 	for i in range(choices.size()):
 		var item = choices[i]
 		var choice_number = i + 1
 		var stackable_text = " (Stackable)" if item.stackable else ""
+		var rarity_text = " [" + rarity_names[clamp(item.rarity, 0, 4)] + "]" if item.rarity >= 0 and item.rarity <= 4 else ""
 		
-		print("  ", choice_number, ") ", item.item_name, stackable_text)
+		print("  ", choice_number, ") ", item.item_name, stackable_text, rarity_text)
 		print("     ", item.description)
 		print("     Type: ", item.item_type)
 		print()

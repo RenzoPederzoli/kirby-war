@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Player/Scripts/LootItem.gd" id="1_movespeed"]
+[ext_resource type="Texture2D" uid="uid://7q5ak74rqkp0" path="res://icon.svg" id="2_uncommon"]
+
+[resource]
+script = ExtResource("1_movespeed")
+item_name = "Speed Boost"
+description = "Increase movement speed by 50%"
+item_type = "stat_upgrade"
+stackable = true
+weight = 1.5
+rarity = 1
+sprite = ExtResource("2_uncommon")
+effect_data = {
+"effect_type": "multiplicative",
+"modifier": 0.5,
+"stat": "move_speed"
+}
+
