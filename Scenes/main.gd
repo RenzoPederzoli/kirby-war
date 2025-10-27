@@ -4,6 +4,7 @@ extends Node2D
 @onready var background_track: AudioStreamPlayer = $BackgroundTrack
 @onready var player: CharacterBody2D = $Player
 @onready var xp_bar: Control = $CanvasLayer/XPBar
+@onready var stats_display: Control = $CanvasLayer/StatsDisplay
 @onready var enemy_spawn_timer: Timer = $EnemySpawnTimer
 
 var enemy_scene: PackedScene
@@ -26,6 +27,10 @@ func _ready():
 	# Connect XP bar to player leveling system
 	if player and player.leveling_system and xp_bar:
 		xp_bar.setup(player.leveling_system)
+	
+	# Connect stats display to player stats system
+	if player and player.stats_system and stats_display:
+		stats_display.setup(player.stats_system)
 	
 	# Connect player death and level up signals
 	if player:
