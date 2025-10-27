@@ -70,3 +70,5 @@ flat = true
 script = ExtResource("6_21xkr")
 
 [node name="XPBar" parent="CanvasLayer" instance=ExtResource("8_xpbar")]
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]

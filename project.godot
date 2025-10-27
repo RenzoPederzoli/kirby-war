@@ -26,7 +26,6 @@ GameStats="*res://autoload/GameStats.gd"
 window/size/viewport_width=320
 window/size/viewport_height=180
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep_width"
 window/vsync/vsync_mode=0
 
 [editor]

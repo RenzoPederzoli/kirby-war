@@ -4,8 +4,11 @@ extends Node2D
 @onready var background_track: AudioStreamPlayer = $BackgroundTrack
 @onready var player: CharacterBody2D = $Player
 @onready var xp_bar: Control = $CanvasLayer/XPBar
+@onready var enemy_spawn_timer: Timer = $EnemySpawnTimer
 
 var enemy_scene: PackedScene
+
+var base_enemy_spawn_timer: float = 8.0
 
 # =============================================================================
 # GAME STATISTICS TRACKING
@@ -24,20 +27,19 @@ func _ready():
 	if player and player.leveling_system and xp_bar:
 		xp_bar.setup(player.leveling_system)
 	
-	# Connect player death signal
+	# Connect player death and level up signals
 	if player:
 		player.player_died.connect(_on_player_died)
-	
+		player.leveling_system.level_up.connect(_on_player_level_up)
+
 	# Initialize game statistics
 	game_start_time = Time.get_unix_time_from_system()
 	
 	# Start spawning enemies every 15 seconds
 	spawn_enemy()
-	var timer = Timer.new()
-	timer.wait_time = 15.0
-	timer.timeout.connect(spawn_enemy)
-	timer.autostart = true
-	add_child(timer)
+	enemy_spawn_timer.wait_time = base_enemy_spawn_timer
+	enemy_spawn_timer.timeout.connect(spawn_enemy)
+	enemy_spawn_timer.start()
 	
 	# Start playing the background track if it's not already playing
 	if not background_track.playing:
@@ -51,6 +53,14 @@ func spawn_enemy():
 	# Connect enemy death signal to track statistics
 	if enemy.has_signal("enemy_died"):
 		enemy.enemy_died.connect(_on_enemy_died)
+
+func _increase_enemy_spawn_rate():
+	"""Increase enemy spawn rate by 20%."""
+	enemy_spawn_timer.wait_time *= 0.8
+	print("Enemy spawn rate increased to: ", enemy_spawn_timer.wait_time)
+
+func _on_player_level_up(_new_level: int):
+	_increase_enemy_spawn_rate()
 
 # =============================================================================
 # GAME STATISTICS TRACKING
