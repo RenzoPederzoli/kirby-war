@@ -80,9 +80,9 @@ func spawn_enemy():
 		else:
 			spawn_x += randf_range(-10, 10)  # Right side variation
 		
-		# Find ground level - use player's Y position as reference
-		var ground_y = player.global_position.y  # Same level as player
-		print("Using ground level: ", ground_y, " (player Y: ", player.global_position.y, ")")
+		# Find ground level - use a fixed ground level that's visible on screen
+		var ground_y = viewport_size.y - 20  # 20 pixels from bottom of screen
+		print("Using ground level: ", ground_y, " (viewport height: ", viewport_size.y, ")")
 		
 		enemy.global_position = Vector2(spawn_x, ground_y)
 		
