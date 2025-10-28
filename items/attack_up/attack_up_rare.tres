@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Player/Scripts/LootItem.gd" id="1_attack"]
+[ext_resource type="Texture2D" uid="uid://7q5ak74rqkp0" path="res://icon.svg" id="2_rare"]
+
+[resource]
+script = ExtResource("1_attack")
+item_name = "Power Strike"
+description = "Increase attack damage by 4"
+item_type = "stat_upgrade"
+stackable = true
+weight = 1.0
+rarity = 2
+sprite = ExtResource("2_rare")
+effect_data = {
+"effect_type": "additive",
+"modifier": 4.0,
+"stat": "attack"
+}
+

@@ -23,6 +23,12 @@ class_name LootItem
 ## Weight for weighted random selection (higher = more likely to be chosen)
 @export var weight: float = 1.0
 
+## Rarity tier (0-4, where 0 is lowest rarity)
+@export var rarity: int = 0
+
+## Sprite texture for the item icon
+@export var sprite: Texture2D
+
 ## Data describing the item's effect (e.g., {"stat": "speed", "modifier": 0.1})
 @export var effect_data: Dictionary
 
@@ -30,10 +36,12 @@ class_name LootItem
 # CONSTRUCTOR
 # =============================================================================
 
-func _init(name: String = "", desc: String = "", type: String = "", can_stack: bool = false, item_weight: float = 1.0, effect: Dictionary = {}):
+func _init(name: String = "", desc: String = "", type: String = "", can_stack: bool = false, item_weight: float = 1.0, item_rarity: int = 0, item_sprite: Texture2D = null, effect: Dictionary = {}):
 	item_name = name
 	description = desc
 	item_type = type
 	stackable = can_stack
 	weight = item_weight
+	rarity = item_rarity
+	sprite = item_sprite
 	effect_data = effect

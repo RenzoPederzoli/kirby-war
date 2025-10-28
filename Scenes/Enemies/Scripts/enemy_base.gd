@@ -217,18 +217,28 @@ func die() -> void:
 
 func _on_touch_damage_body_entered(body: Node) -> void:
 	"""Handle player contact with enemy."""
-	# For jump-vulnerable enemies (golems), check if player is coming from above
+	# For jump-vulnerable enemies (golems), check if player is jumping on head
 	if enemy_data and enemy_data.vulnerable_to_jumping:
-		# Check if player is above the enemy AND falling down (jumping on head)
-		var player_velocity_y = body.velocity.y if "velocity" in body else 0
-		var is_above = body.global_position.y < global_position.y
-		var is_falling = player_velocity_y > 0
-		
-		if is_above and is_falling:
-			return  # Skip touch damage when jumping on head from above
+		if _is_player_jumping_on_head(body):
+			_handle_head_jump(body)
+			return
 	
+	# Apply normal touch damage for side/body contact
 	if body.has_method("apply_enemy_contact"):
 		body.apply_enemy_contact(self, contact_damage)
+
+func _is_player_jumping_on_head(body: Node) -> bool:
+	"""Check if player is jumping on the enemy's head."""
+	var player_velocity_y = body.velocity.y if "velocity" in body else 0
+	var is_above = body.global_position.y < global_position.y - 5  # More generous threshold
+	var is_falling = player_velocity_y > 15  # Lower velocity requirement
+	return is_above and is_falling
+
+func _handle_head_jump(body: Node) -> void:
+	"""Handle when player jumps on enemy's head."""
+	apply_jump_damage()
+	if body.has_method("apply_enemy_bounce"):
+		body.apply_enemy_bounce()
 
 # =============================================================================
 # PUBLIC INTERFACE
@@ -301,21 +311,36 @@ func _setup_collision_from_data():
 	
 	# Setup touch damage area
 	if touch_damage_shape:
-		# Configure Area2D to detect player on layer 2
-		touch_damage.collision_layer = 0  # Touch damage doesn't need a layer
-		touch_damage.collision_mask = 2   # Detect player on layer 2
-		
-		touch_damage_shape.shape = CircleShape2D.new()
-		var scale_factor = (enemy_data.sprite_scale.x + enemy_data.sprite_scale.y) / 2.0
-		var scaled_touch_radius = enemy_data.touch_damage_radius * scale_factor
-		touch_damage_shape.shape.radius = scaled_touch_radius
-		
-		# For golems, position touch damage at body level (not head)
-		if enemy_data.movement_type == "patrol":
-			# Position touch damage at body level so head is safe for jumping
-			touch_damage.position = Vector2(0, 8 * enemy_data.sprite_scale.y)
-			# Make the touch damage area smaller - only the lower body
-			touch_damage_shape.shape.radius = scaled_touch_radius * 0.4
+		_setup_touch_damage_area()
+
+func _setup_touch_damage_area():
+	"""Configure the touch damage detection area."""
+	# Configure Area2D to detect player on layer 2
+	touch_damage.collision_layer = 0  # Touch damage doesn't need a layer
+	touch_damage.collision_mask = 2   # Detect player on layer 2
+	
+	# Create circular collision shape
+	touch_damage_shape.shape = CircleShape2D.new()
+	var scale_factor = (enemy_data.sprite_scale.x + enemy_data.sprite_scale.y) / 2.0
+	var scaled_touch_radius = enemy_data.touch_damage_radius * scale_factor
+	
+	# Configure based on enemy type
+	if enemy_data.movement_type == "patrol":
+		_setup_golem_touch_damage(scaled_touch_radius)
+	else:
+		_setup_default_touch_damage(scaled_touch_radius)
+
+func _setup_golem_touch_damage(scaled_radius: float):
+	"""Setup touch damage area for golem enemies (patrol type)."""
+	# Position at middle body level - covers sides but not head
+	touch_damage.position = Vector2(0, 4 * enemy_data.sprite_scale.y)
+	# Medium size to cover body width but not too tall
+	touch_damage_shape.shape.radius = scaled_radius * 0.6
+
+func _setup_default_touch_damage(scaled_radius: float):
+	"""Setup touch damage area for other enemy types."""
+	touch_damage.position = Vector2.ZERO
+	touch_damage_shape.shape.radius = scaled_radius
 
 func _setup_rectangle_collision():
 	"""Setup rectangle collision shape."""
@@ -383,7 +408,7 @@ func _on_enemy_died():
 	"""Signal handler for enemy death."""
 	print("Enemy died: ", name)
 
-func _on_body_entered(body: Node):
+func _on_body_entered(_body: Node):
 	"""Handle collision with other bodies for bouncing."""
 	if movement_type != "bouncing":
 		return

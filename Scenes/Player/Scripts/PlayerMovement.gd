@@ -87,9 +87,7 @@ func _setup_ground_raycast():
 	"""Configure the ground detection raycast."""
 	ground_raycast.target_position = Vector2(0, 15)
 	ground_raycast.enabled = true
-	# Detect layer 1 (ground) and layer 4 (enemies for jumping on head)
-	# Raycast is separate from player collision, so it can detect enemies
-	ground_raycast.collision_mask = 1 + 4  # Layers 1 and 4
+	ground_raycast.collision_mask = 1
 
 # =============================================================================
 # MAIN UPDATE
@@ -125,7 +123,11 @@ func _handle_movement_input(delta: float):
 func _handle_momentum_movement(direction: float, delta: float):
 	"""Handle momentum-based horizontal movement with acceleration and deceleration."""
 	if direction != 0:
-		var target_velocity = direction * terminal_velocity
+		# Get movement speed multiplier from stats system
+		var move_speed_multiplier = player.get_move_speed()
+		
+		# Apply movement speed multiplier to terminal velocity
+		var target_velocity = direction * terminal_velocity * move_speed_multiplier
 		var current_acceleration = acceleration
 		
 		# Apply enhanced acceleration after braking
@@ -185,7 +187,6 @@ func check_jump_reset():
 	"""Reset jump ability when player touches the ground."""
 	if ground_raycast.is_colliding() and jump_reset_timer <= 0:
 		can_jump = true
-		_check_enemy_jump_damage()
 
 # =============================================================================
 # BRAKING SYSTEM
@@ -209,13 +210,11 @@ func reset_brake_animation_flag():
 		brake_animation_played = false
 
 # =============================================================================
-# ENEMY JUMP DAMAGE SYSTEM
+# ENEMY INTERACTION
 # =============================================================================
 
-func _check_enemy_jump_damage():
-	"""Check if player landed on an enemy and apply jump damage."""
-	var collider = ground_raycast.get_collider()
-	if collider and collider.has_method("apply_jump_damage"):
-		# Player landed on an enemy - apply jump damage
-		collider.apply_jump_damage()
-		print("Player jumped on enemy: ", collider.name)
+func apply_enemy_bounce():
+	"""Apply Mario-style bounce effect when jumping on enemies."""
+	# Apply upward velocity for satisfying bounce (higher than regular jump)
+	player.velocity.y = -200.0
+	print("Player bounced off enemy!")

@@ -144,7 +144,7 @@ func apply_enemy_contact(enemy: Node2D, damage: int, animation_system):
 		
 		# Apply damage to health
 		player.current_health -= damage
-		print("Player health: ", player.current_health, "/", player.max_health)
+		print("Player health: ", player.current_health, "/", player.get_max_health())
 		
 		# Check if player died
 		if player.current_health <= 0:

@@ -3,6 +3,9 @@ extends CharacterBody2D
 ## Player character controller using composition pattern.
 ## Delegates functionality to specialized system classes for better organization and maintainability.
 
+# Preload PlayerStats to access StatType enum
+const PlayerStatsClass = preload("res://Scenes/Player/Scripts/PlayerStats.gd")
+
 # =============================================================================
 # SIGNALS
 # =============================================================================
@@ -53,6 +56,7 @@ var animation_system
 var effects_system
 var leveling_system
 var loot_system
+var stats_system
 
 # Health System
 var current_health: int
@@ -72,10 +76,8 @@ func _ready():
 	collision_layer = 2
 	collision_mask = 1  # Only collide with world (1), NOT enemies (4) - so player ignores enemy physics
 	
-	# Initialize health
-	current_health = max_health
-	
 	# Initialize all systems
+	stats_system = preload("res://Scenes/Player/Scripts/PlayerStats.gd").new(self)
 	movement_system = preload("res://Scenes/Player/Scripts/PlayerMovement.gd").new(self)
 	combat_system = preload("res://Scenes/Player/Scripts/PlayerCombat.gd").new(self)
 	animation_system = preload("res://Scenes/Player/Scripts/PlayerAnimation.gd").new(self)
@@ -85,6 +87,9 @@ func _ready():
 	
 	# Pass exported values to systems
 	_configure_systems()
+	
+	# Initialize health using stats system
+	current_health = get_max_health()
 	
 	# Connect signals
 	player_shot.connect(_on_player_shot)
@@ -146,6 +151,10 @@ func apply_enemy_contact(enemy: Node2D, damage: int):
 	"""Handle damage from enemy contact - delegates to effects system."""
 	effects_system.apply_enemy_contact(enemy, damage, animation_system)
 
+func apply_enemy_bounce():
+	"""Handle bounce effect when jumping on enemy."""
+	movement_system.apply_enemy_bounce()
+
 func on_enemy_defeated(xp_amount: int):
 	"""Handle enemy defeat - delegates to leveling system."""
 	leveling_system.gain_experience(xp_amount)
@@ -187,8 +196,12 @@ func get_current_health() -> int:
 	return current_health
 
 func get_max_health() -> int:
-	"""Get the maximum health."""
-	return max_health
+	"""Get the current maximum health from the stats system."""
+	return int(stats_system.get_stat_value(PlayerStatsClass.StatType.MAX_HEALTH))
+
+func get_move_speed() -> float:
+	"""Get the current movement speed multiplier from the stats system."""
+	return stats_system.get_stat_value(PlayerStatsClass.StatType.MOVE_SPEED)
 
 func is_player_dead() -> bool:
 	"""Check if the player is dead."""

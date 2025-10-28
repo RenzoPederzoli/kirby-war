@@ -17,8 +17,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-LootTable="*res://Scenes/Player/Scripts/LootTable.gd"
+LootTable="*res://autoload/LootTable.gd"
 GameStats="*res://Scenes/GameStats.gd"
+UIManager="*res://autoload/UIManager.gd"
 
 [display]
 
