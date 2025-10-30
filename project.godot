@@ -18,8 +18,13 @@ config/icon="res://icon.svg"
 [autoload]
 
 LootTable="*res://autoload/LootTable.gd"
+<<<<<<< HEAD
 UI="*res://autoload/UIManager.gd"
 GameStats="*res://autoload/GameStats.gd"
+=======
+GameStats="*res://Scenes/GameStats.gd"
+UIManager="*res://autoload/UIManager.gd"
+>>>>>>> feature/GenericEnemy
 
 [display]
 

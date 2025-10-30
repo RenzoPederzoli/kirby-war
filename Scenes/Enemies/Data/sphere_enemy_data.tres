@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://b8x7y201bab4c"]
+
+[ext_resource type="Script" uid="uid://82d5sg0ff7pr" path="res://Scenes/Enemies/Scripts/EnemyData.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dedmtxl4yg2i" path="res://Scenes/Enemies/Animations/Shatter_projectile_explosion-Sheet.png" id="2_texture"]
+
+[resource]
+script = ExtResource("1_script")
+enemy_name = "Bouncing Sphere"
+texture = ExtResource("2_texture")
+sprite_scale = Vector2(0.507017, 0.507017)
+sprite_offset = Vector2(0, 0)
+sprite_modulate = Color(1, 1, 1, 1)
+movement_type = "bouncing"
+speed = 150.0
+min_speed = 150.0
+max_speed = 200.0
+gravity_scale = 1.0
+friction = 0.0
+bounce = 1.0
+max_health = 60
+contact_damage = 1
+xp_reward = 50
+vulnerable_to_bullets = true
+vulnerable_to_jumping = false
+collision_radius = 8.0
+collision_shape = "circle"
+touch_damage_radius = 9.0
+animation_type = "sphere"
+animation_speed = 1.0
+animation_loop = true

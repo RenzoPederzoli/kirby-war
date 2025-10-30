@@ -1,14 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://d25v66o1mgo2h"]
+[gd_scene load_steps=16 format=3 uid="uid://d25v66o1mgo2h"]
 
 [ext_resource type="Script" uid="uid://cw80t024lr7ry" path="res://Scenes/Enemies/Scripts/enemy_base.gd" id="1_p6c21"]
-[ext_resource type="Texture2D" uid="uid://dedmtxl4yg2i" path="res://Scenes/Enemies/Animations/Shatter_projectile_explosion-Sheet.png" id="4_2a3kf"]
+[ext_resource type="Texture2D" uid="uid://dedmtxl4yg2i" path="res://Scenes/Enemies/Animations/Shatter_projectile_explosion-Sheet.png" id="2_p6c21"]
+[ext_resource type="Texture2D" uid="uid://bh8oqtm755d1m" path="res://Scenes/Enemies/Animations/Ice_Golem_death-Sheet.png" id="3_2a3kf"]
+[ext_resource type="Animation" uid="uid://dfucyx0xgvmow" path="res://Scenes/Enemies/Animations/golem_walking.res" id="3_srcxp"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_p6c21"]
 friction = 0.0
 bounce = 1.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_pu86i"]
-radius = 8.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p6c21"]
 radius = 9.0
@@ -18,26 +17,44 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
+<<<<<<< HEAD
 tracks/0/path = NodePath("Sprite2D:texture")
+=======
+tracks/0/path = NodePath("Sprite2D:region_rect")
+>>>>>>> feature/GenericEnemy
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
+<<<<<<< HEAD
 "update": 1,
 "values": [ExtResource("4_2a3kf")]
+=======
+"update": 0,
+"values": [Rect2(0, 0, 32, 32)]
+>>>>>>> feature/GenericEnemy
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
+<<<<<<< HEAD
 tracks/1/path = NodePath("Sprite2D:region_rect")
+=======
+tracks/1/path = NodePath("Sprite2D:texture")
+>>>>>>> feature/GenericEnemy
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
+<<<<<<< HEAD
 "update": 0,
 "values": [Rect2(0, 0, 32, 32)]
+=======
+"update": 1,
+"values": [null]
+>>>>>>> feature/GenericEnemy
 }
 
 [sub_resource type="Animation" id="Animation_srcxp"]
@@ -46,28 +63,79 @@ length = 0.85
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("Sprite2D:region_rect")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.85),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("4_2a3kf")]
+"values": [Rect2(0, 0, 32, 32), Rect2(32, 0, 32, 32), Rect2(64, 0, 32, 32), Rect2(96, 0, 32, 32), Rect2(128, 0, 32, 32), Rect2(160, 0, 32, 32), Rect2(192, 0, 32, 32), Rect2(224, 0, 32, 32), Rect2(256, 0, 32, 32), Rect2(288, 0, 32, 32)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:region_rect")
+tracks/1/path = NodePath("Sprite2D:texture")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_p6c21")]
+}
+
+<<<<<<< HEAD
+=======
+[sub_resource type="Animation" id="Animation_golem_death"]
+resource_name = "golem_death"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.433333, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 0, 32, 32), Rect2(32, 0, 32, 32), Rect2(64, 0, 32, 32), Rect2(96, 0, 32, 32)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_2a3kf")]
+}
+
+[sub_resource type="Animation" id="Animation_golem_idle"]
+resource_name = "golem_idle"
+loop_mode = 1
+
+[sub_resource type="Animation" id="Animation_iiq2q"]
+resource_name = "ice_golem_death"
+length = 0.85
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.85),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Rect2(0, 0, 32, 32), Rect2(32, 0, 32, 32), Rect2(64, 0, 32, 32), Rect2(96, 0, 32, 32), Rect2(128, 0, 32, 32), Rect2(160, 0, 32, 32), Rect2(192, 0, 32, 32), Rect2(224, 0, 32, 32), Rect2(256, 0, 32, 32), Rect2(288, 0, 32, 32)]
 }
 
+>>>>>>> feature/GenericEnemy
 [sub_resource type="Animation" id="Animation_m1s7c"]
 resource_name = "idle"
 length = 0.2
@@ -75,22 +143,10 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("Sprite2D:region_rect")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("4_2a3kf")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:region_rect")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -103,51 +159,60 @@ length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("Sprite2D:region_rect")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("4_2a3kf")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:region_rect")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
 "values": [Rect2(32, 0, 32, 32)]
+}
+
+[sub_resource type="Animation" id="Animation_walking"]
+resource_name = "walking"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 0, 32, 32), Rect2(32, 0, 32, 32), Rect2(64, 0, 32, 32), Rect2(32, 0, 32, 32)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m1s7c"]
 _data = {
 &"RESET": SubResource("Animation_2a3kf"),
 &"death": SubResource("Animation_srcxp"),
+&"golem_death": SubResource("Animation_golem_death"),
+&"golem_idle": SubResource("Animation_golem_idle"),
+&"golem_walking": ExtResource("3_srcxp"),
+&"ice_golem_death": SubResource("Animation_iiq2q"),
 &"idle": SubResource("Animation_m1s7c"),
-&"take_damage": SubResource("Animation_aahyb")
+&"take_damage": SubResource("Animation_aahyb"),
+&"walking": SubResource("Animation_walking")
 }
 
 [node name="EnemyBase" type="RigidBody2D"]
+position = Vector2(20, 20)
 collision_layer = 2
-collision_mask = 2
 physics_material_override = SubResource("PhysicsMaterial_p6c21")
 gravity_scale = 0.2
 can_sleep = false
 continuous_cd = 1
+linear_velocity = Vector2(131.76, 490)
 script = ExtResource("1_p6c21")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_pu86i")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.507017, 0.507017)
-texture = ExtResource("4_2a3kf")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 

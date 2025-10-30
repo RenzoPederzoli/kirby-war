@@ -208,3 +208,13 @@ func reset_brake_animation_flag():
 	"""Reset the brake animation flag when not braking."""
 	if not is_braking:
 		brake_animation_played = false
+
+# =============================================================================
+# ENEMY INTERACTION
+# =============================================================================
+
+func apply_enemy_bounce():
+	"""Apply Mario-style bounce effect when jumping on enemies."""
+	# Apply upward velocity for satisfying bounce (higher than regular jump)
+	player.velocity.y = -200.0
+	print("Player bounced off enemy!")
