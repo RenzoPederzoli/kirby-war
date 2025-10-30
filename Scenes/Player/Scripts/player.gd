@@ -3,9 +3,6 @@ extends CharacterBody2D
 ## Player character controller using composition pattern.
 ## Delegates functionality to specialized system classes for better organization and maintainability.
 
-# Preload PlayerStats to access StatType enum
-const PlayerStatsClass = preload("res://Scenes/Player/Scripts/PlayerStats.gd")
-
 # =============================================================================
 # SIGNALS
 # =============================================================================
@@ -64,10 +61,6 @@ func _ready():
 	add_to_group("player")
 	
 	
-	# Set player collision layers
-	# Layer 2 for player - enemies bounce off player but player doesn't get pushed
-	collision_layer = 2
-	collision_mask = 1  # Only collide with world (1), NOT enemies (4) - so player ignores enemy physics
 	
 	# Initialize all systems
 	stats_system = preload("res://Scenes/Player/Scripts/PlayerStats.gd").new(self)
@@ -83,6 +76,7 @@ func _ready():
 	
 	# Initialize health
 	current_health = get_max_health()
+
 	# Connect signals
 	player_shot.connect(_on_player_shot)
 	player_died.connect(_on_player_died)
@@ -143,10 +137,6 @@ func _physics_process(delta: float):
 func apply_enemy_contact(enemy: Node2D, damage: int):
 	"""Handle damage from enemy contact - delegates to effects system."""
 	effects_system.apply_enemy_contact(enemy, damage, animation_system)
-
-func apply_enemy_bounce():
-	"""Handle bounce effect when jumping on enemy."""
-	movement_system.apply_enemy_bounce()
 
 func on_enemy_defeated(xp_amount: int):
 	"""Handle enemy defeat - delegates to leveling system."""

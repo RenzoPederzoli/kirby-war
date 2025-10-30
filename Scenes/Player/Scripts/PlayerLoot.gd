@@ -65,11 +65,7 @@ func _on_level_up(new_level: int):
 	# Print loot choices to console with formatting
 	_print_loot_choices(loot_choices)
 
-<<<<<<< HEAD
 	var picked = await UI.show_loot_choices(loot_choices)
-=======
-	var picked = await UIManager.show_loot_choices(loot_choices)
->>>>>>> feature/GenericEnemy
 	
 	print("Picked: ", picked.item_name, " (Rarity ", picked.rarity, ")")
 	

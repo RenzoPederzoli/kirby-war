@@ -20,9 +20,6 @@ var enemies_defeated: int = 0
 var game_start_time: float
 var items_collected: int = 0
 
-# Enemy spawning variables
-var enemy_spawn_counter: int = 0
-
 func _ready():
 	# Load the enemy scene
 	enemy_scene = preload("res://Scenes/Enemies/EnemyBase.tscn")
@@ -56,54 +53,7 @@ func _ready():
 func spawn_enemy():
 	var enemy = enemy_scene.instantiate()
 	add_child(enemy)
-	
-	# Alternate between sphere and golem enemies
-	var enemy_data: Resource
-	if enemy_spawn_counter % 2 == 0:
-		# Spawn sphere (bouncing)
-		enemy_data = preload("res://Scenes/Enemies/Data/sphere_enemy_data.tres")
-	else:
-		# Spawn golem (patrol)
-		enemy_data = preload("res://Scenes/Enemies/Data/ice_golem_data.tres")
-	
-	# Apply enemy data
-	enemy.apply_enemy_data(enemy_data)
-	
-	# Set enemy name for debugging
-	enemy.name = enemy_data.enemy_name + "_" + str(Time.get_unix_time_from_system())
-	print("Spawned enemy: ", enemy.name, " with movement type: ", enemy_data.movement_type)
-	print("  - Animation type: ", enemy_data.animation_type)
-	print("  - Gravity scale: ", enemy_data.gravity_scale)
-	
-	# Position enemy based on movement type
-	if enemy_data.movement_type == "patrol":
-		# Spawn patrol enemies on actual ground at screen edges
-		var viewport_size = get_viewport().get_visible_rect().size
-		var spawn_x = 50 if randf() < 0.5 else viewport_size.x - 50  # Left or right edge
-		
-		# Add some horizontal spacing to prevent overlapping
-		if spawn_x < viewport_size.x / 2:
-			spawn_x += randf_range(-10, 10)  # Left side variation
-		else:
-			spawn_x += randf_range(-10, 10)  # Right side variation
-		
-		# Find ground level - use a fixed ground level that's visible on screen
-		var ground_y = viewport_size.y - 20  # 20 pixels from bottom of screen
-		print("Using ground level: ", ground_y, " (viewport height: ", viewport_size.y, ")")
-		
-		enemy.global_position = Vector2(spawn_x, ground_y)
-		
-		# Set initial direction based on spawn side
-		if spawn_x < viewport_size.x / 2:
-			enemy.linear_velocity = Vector2(enemy_data.speed, 0)  # Move right
-		else:
-			enemy.linear_velocity = Vector2(-enemy_data.speed, 0)  # Move left
-	else:
-		# Spawn bouncing enemies at the original spawn point
-		enemy.global_position = enemy_spawn_point.global_position
-	
-	# Increment spawn counter for next enemy
-	enemy_spawn_counter += 1
+	enemy.global_position = enemy_spawn_point.global_position
 	
 	# Connect enemy death signal to track statistics
 	if enemy.has_signal("enemy_died"):

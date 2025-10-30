@@ -1,10 +1,6 @@
 extends Node
 
-<<<<<<< HEAD
 var loot_overlay_scene := preload("res://Scenes/ui/LootOverlay.tscn")
-=======
-var loot_overlay_scene := preload("res://Scenes/UI/LootOverlay.tscn")
->>>>>>> feature/GenericEnemy
 var _is_modal_open := false
 var _pause_refcount := 0
 
