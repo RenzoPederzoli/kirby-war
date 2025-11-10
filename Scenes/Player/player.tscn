@@ -302,7 +302,7 @@ position = Vector2(0, 4)
 target_position = Vector2(0, 20)
 
 [node name="AimPivot" type="Node2D" parent="."]
-position = Vector2(15, 0)
+position = Vector2(11, 0)
 
 [node name="WeaponSprite" type="Sprite2D" parent="AimPivot"]
 scale = Vector2(0.5, 0.5)
