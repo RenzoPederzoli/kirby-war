@@ -297,15 +297,16 @@ libraries = {
 &"": SubResource("AnimationLibrary_htcer")
 }
 
-[node name="ProjSpawnPoint" type="Marker2D" parent="."]
-position = Vector2(0, -26)
-gizmo_extents = 28.2
-
 [node name="GroundRayCast" type="RayCast2D" parent="."]
 position = Vector2(0, 4)
 target_position = Vector2(0, 20)
 
-[node name="WandSprite" type="Sprite2D" parent="."]
-position = Vector2(1, -20)
-scale = Vector2(0.406608, 0.406608)
+[node name="AimPivot" type="Node2D" parent="."]
+position = Vector2(15, 0)
+
+[node name="WeaponSprite" type="Sprite2D" parent="AimPivot"]
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("8_jlvik")
+
+[node name="Muzzle" type="Marker2D" parent="AimPivot"]
+position = Vector2(1.77701e-05, -8)

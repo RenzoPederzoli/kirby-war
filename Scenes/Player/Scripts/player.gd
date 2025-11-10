@@ -7,9 +7,6 @@ extends CharacterBody2D
 # SIGNALS
 # =============================================================================
 
-## Emitted when the player shoots
-signal player_shot
-
 ## Emitted when the player dies
 signal player_died
 
@@ -78,7 +75,6 @@ func _ready():
 	current_health = get_max_health()
 
 	# Connect signals
-	player_shot.connect(_on_player_shot)
 	player_died.connect(_on_player_died)
 	stats_system.stat_changed.connect(_on_stat_changed)
 	
@@ -210,10 +206,6 @@ func _on_player_died():
 # =============================================================================
 # SIGNAL HANDLERS
 # =============================================================================
-
-func _on_player_shot():
-	"""Handle player shot signal - notify effects system."""
-	effects_system.on_player_shoot()
 
 func _on_stat_changed(stat_type: PlayerStats.StatType, old_value: float, new_value: float):
 	"""
