@@ -98,7 +98,6 @@ func update_movement(delta: float):
 	_update_timers(delta)
 	_apply_gravity(delta)
 	_handle_movement_input(delta)
-	_handle_screen_wrapping()
 
 func _update_timers(delta: float):
 	"""Update all movement-related timers."""
@@ -163,15 +162,6 @@ func _handle_jumping_input():
 	"""Process jumping input and execute jump if conditions are met."""
 	if Input.is_action_just_pressed("ui_accept") and can_jump:
 		jump()
-
-func _handle_screen_wrapping():
-	"""Wrap player position when moving off screen edges."""
-	var viewport_size = player.get_viewport().get_visible_rect().size
-	
-	if player.global_position.x < 0:
-		player.global_position.x = viewport_size.x
-	elif player.global_position.x > viewport_size.x:
-		player.global_position.x = 0
 
 # =============================================================================
 # JUMPING SYSTEM
