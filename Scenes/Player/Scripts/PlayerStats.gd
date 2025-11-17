@@ -154,40 +154,72 @@ func multiply_stat_modifier(stat_type: StatType, multiplier: float):
 func apply_item_effect(item: LootItem):
 	"""
 	Apply an item's effect to the stats system.
-	
+
 	Args:
 		item: The LootItem containing effect data
 	"""
 	if not item.effect_data.has("stat"):
 		print("Warning: Item '", item.item_name, "' has no stat in effect_data")
 		return
-	
+
 	var stat_name = item.effect_data["stat"]
+	var modifier = item.effect_data.get("modifier", 0.0)
+	var effect_type = item.effect_data.get("effect_type", "additive")
+
+	# Handle "all" stats case
+	if stat_name.to_lower() == "all":
+		_apply_effect_to_all_stats(item, modifier, effect_type)
+		return
+
+	# Handle "combat" stats case (excludes health)
+	if stat_name.to_lower() == "combat":
+		_apply_effect_to_combat_stats(item, modifier, effect_type)
+		return
+
 	var stat_type = _get_stat_type_from_name(stat_name)
-	
+
 	# Check if it's a valid stat name (not the default fallback)
 	var valid_stat_names = ["fire_rate", "shoot_rate", "attack_speed", "attack", "damage", "move_speed", "speed", "movement_speed", "max_health", "health", "hearts"]
 	if not stat_name.to_lower() in valid_stat_names:
 		print("Warning: Unknown stat '", stat_name, "' in item '", item.item_name, "'")
 		return
-	
-	var modifier = item.effect_data.get("modifier", 0.0)
-	var effect_type = item.effect_data.get("effect_type", "additive")
-	
+
+	_apply_single_stat_effect(stat_type, modifier, effect_type, item.item_name, stat_name)
+
+func _apply_single_stat_effect(stat_type: StatType, modifier: float, effect_type: String, item_name: String, stat_name: String):
+	"""Apply an effect to a single stat."""
 	match effect_type:
 		"additive":
 			add_stat_modifier(stat_type, modifier)
 		"multiplicative":
-			# Convert percentage increase to multiplier (e.g., 0.25 -> 1.25 for 25% increase)
-			var multiplier = 1.0 + modifier
-			multiply_stat_modifier(stat_type, multiplier)
+			multiply_stat_modifier(stat_type, modifier)
 		"set_base":
 			set_base_stat(stat_type, modifier)
 		_:
-			print("Warning: Unknown effect_type '", effect_type, "' in item '", item.item_name, "'")
-	
-	print("Applied effect from '", item.item_name, "': ", stat_name, " ", effect_type, " ", modifier)
+			print("Warning: Unknown effect_type '", effect_type, "' in item '", item_name, "'")
+			return
+
+	print("Applied effect from '", item_name, "': ", stat_name, " ", effect_type, " ", modifier)
 	print("New ", stat_name, ": ", get_stat_value(stat_type))
+
+func _apply_effect_to_all_stats(item: LootItem, modifier: float, effect_type: String):
+	"""Apply an effect to all stats at once."""
+	print("Applying '", item.item_name, "' effect to ALL stats:")
+
+	for stat_type in StatType.values():
+		var stat_name = get_stat_name(stat_type)
+		_apply_single_stat_effect(stat_type, modifier, effect_type, item.item_name, stat_name)
+
+func _apply_effect_to_combat_stats(item: LootItem, modifier: float, effect_type: String):
+	"""Apply an effect to combat stats (excludes MAX_HEALTH for integer-based hearts)."""
+	print("Applying '", item.item_name, "' effect to COMBAT stats:")
+
+	for stat_type in StatType.values():
+		# Skip health since it's integer-based (hearts)
+		if stat_type == StatType.MAX_HEALTH:
+			continue
+		var stat_name = get_stat_name(stat_type)
+		_apply_single_stat_effect(stat_type, modifier, effect_type, item.item_name, stat_name)
 
 # =============================================================================
 # UTILITY METHODS

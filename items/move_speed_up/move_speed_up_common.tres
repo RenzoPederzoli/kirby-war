@@ -14,7 +14,7 @@ rarity = 0
 sprite = ExtResource("2_common")
 effect_data = {
 "effect_type": "multiplicative",
-"modifier": 0.25,
+"modifier": 1.25,
 "stat": "move_speed"
 }
 

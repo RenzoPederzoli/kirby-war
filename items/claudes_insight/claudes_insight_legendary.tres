@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=3 format=3 uid="uid://u0mjxp5q5maj"]
+
+[ext_resource type="Script" uid="uid://tcoxhg84u84f" path="res://Scenes/Player/Scripts/LootItem.gd" id="1_claude"]
+[ext_resource type="Texture2D" uid="uid://7q5ak74rqkp0" path="res://icon.svg" id="2_legendary"]
+
+[resource]
+script = ExtResource("1_claude")
+item_name = "Claude's Insight"
+description = "Boost attack, fire rate, and move speed by 10% - A reward for proper setup"
+item_type = "stat_upgrade"
+stackable = false
+weight = 0.5
+rarity = 4
+sprite = ExtResource("2_legendary")
+effect_data = {
+"effect_type": "multiplicative",
+"modifier": 1.1,
+"stat": "combat"
+}
